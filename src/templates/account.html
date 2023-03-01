@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% load template_tags %}
+{% block pageContent %}
+    <div class="col-sm custom-grid">
+        <div class="well">
+            <div class="center-page center-text">
+                <div class="form-group"> 
+                    {% if user == view_user %}
+                        <h4>Your Account</h4>
+                    {% else %}
+                        <h4>{{ view_user.username }}'s Account</h4>
+                    {% endif %}
+                    {% include 'messages.html' %}
+                    <div class="tools"></div>      
+                    <table class="profile-table">
+                        <tr>
+                            <td> <b>Username:</b> </td>
+                            <td>{{ view_user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td> <b>Email:</b> </td>
+                            <td>{{ view_user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td> <b>Description / Role:</b> </td>
+                            <td>{{ view_user.profile.description }}</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <div class="buttons-holder">
+                        {% if user == view_user %}
+                            <div class="button-holder custom-margins">
+                                <a href="{% url 'update_account' %}"><button class="btn btn-primary px-2 m-3">Update Account</button></a>
+                            </div>
+                        {% endif %}
+                        {% if user == view_user or user.is_superuser %}
+                            <div class="button-holder custom-margins">
+                                <a href="{% url 'update_profile' id=request.resolver_match.kwargs.id %}"><button class="btn btn-primary px-2 m-3">Update Data</button></a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>  
+            </div>
+        </div>
+    </div>
+{% endblock pageContent%}

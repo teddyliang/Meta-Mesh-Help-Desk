@@ -1,0 +1,432 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Karla", sans-serif;
+    background-color: #434343;
+}
+
+.logo1 {
+    margin-top:40px;
+}
+
+.navbar-brand {
+    width: 63px;
+}
+
+.logo1 img, .nav-bar-image {
+    width: 250%;
+    height: 100%;
+}
+
+.profile-table td {
+    padding-right: 30px;
+    padding-bottom: 10px;
+}
+
+.custom-grid {
+    margin-left: 240px;
+    margin-right: 40px;
+}
+
+.danger {
+    background: #b10000  !important;
+    color: white !important;
+    border: 0px !important;
+}
+
+.rowheader {
+    font-weight:bold !important;
+}
+
+.frame-header {
+    color:red;
+}
+
+.top-header {
+    display: flex;
+    justify-content:space-between
+}
+
+.navbar-user {
+    text-align: center;
+    font-weight: bold;
+    color: white;
+}
+
+ul.nav.nav-pills.nav-stacked a {
+    /* Override the navbar stylesheet */
+    color: #d1d1d1;
+}
+
+ul.nav.nav-pills.nav-stacked li>a:hover {
+    /* Override the navbar stylesheet */
+    background-color: #767676;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    /* Override the navbar stylesheet */
+    background-color: #1890FF;
+    color: white;
+}
+
+.nav-options {
+    justify-content: left;
+    align-items: left;
+    display: flex !important;
+}
+
+.btn {
+    border: 1px solid #1890ff;
+}
+
+.left-menu {
+    display: flex;
+    justify-content: space-around;
+    /* transition: 250ms ease-out; */
+
+}
+
+.dropdown-menu {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #1890FF;
+    height: 44px;
+}
+
+.home-right {
+    display:flex;
+    flex-direction:row;
+    column-gap: 1em;
+}
+
+.sidenav {
+    background-color: #222222;
+    height: 100%;
+    width: 200px !important;
+    position: fixed;
+}
+        
+/* On small screens, set height to 'auto' for the grid */
+@media screen and (max-width: 766px) {
+    .custom-grid {
+        margin-left:40px;
+    }
+    .row.content {height: auto;} 
+}
+
+.search-container button{
+    float: right;
+    /* padding: 12px 14px; */
+    height: 44px;
+    width: 44px;
+    font-size: 17px;
+    cursor: pointer;
+    background: #5678FF;
+    border: none;
+    color: white;
+}
+
+input, select, textarea {
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid #24357c;
+    height: 44px;
+    width: 200px;;
+    font-weight: normal;
+    padding-left: 20px;
+    color: #4D4D4D;
+
+    border-radius: 5px;
+    margin-bottom: 3px;
+}
+
+input[type=number], input[type=date], select {
+    height: 30px;
+}
+
+textarea {
+    height: 80px;
+}
+
+.align-fields select, .align-fields input, .align-fields textarea {
+    width: 100%;
+}
+
+.align-fields-general {
+    width: 220px;
+    margin: auto;
+}
+
+.align-labels {
+    text-align: left;
+}
+
+.align-fields {
+    text-align: center;
+}
+
+.tools{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #e0e4e8;
+    margin-bottom: 16px;
+    padding-top: 5px;
+}
+
+.secondary-button {
+    /* justify-content: center; */
+    border: none;
+    background: none;
+    /* color: #3D3D3D; */
+
+    align-items: center;
+    /* border: 1px solid; */
+    border-radius: 6px;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-shrink: 0;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.pagination {
+    /* align-items: center; */
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+    justify-content: center;
+    text-align: center;
+}
+
+.data-frame {
+    /* margin-top: 40px; */
+    width: 100%;
+    /* max-width: 950px; */
+    list-style-type: none;
+    padding: 0;
+    /* padding-left: 40px;
+    padding-right: 40px; */
+}
+
+.profile-table {
+    width: 100%;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.data-item.frame-header {
+    display: none;
+    border-bottom: 1px dashed #e0e4e8;
+}
+
+li.data-item {
+    margin-bottom: 0.5em;
+    /* On mobile, separate rows by having a faint 
+    separator between data-item elements.
+    */
+    border-bottom: 1px solid #0000001a;
+}
+
+.data-item dl{
+    display: flex;
+    flex-direction:column;
+    margin: 0;
+    color: black;
+}
+
+dl {
+    color: #B1B1B1;
+}
+
+.data-item .username:before {
+    content: "Username: ";
+}
+
+.data-item .description:before {
+    content: "Description: ";
+}
+
+.data-item .email:before {
+    content: "Email: ";
+}
+
+.data-item .date:before {
+    content: "Date (UTC): ";
+}
+
+.data-item .last-updated:before {
+    content: "Last updated (UTC): ";
+}
+
+.data-item .last-login:before {
+    content: "Last login (UTC): ";
+}
+
+.data-item .date-joined:before {
+    content: "Date created (UTC): ";
+}
+
+.data-item dd {
+    margin: 0;
+    margin-bottom: 0.25em;
+    overflow-wrap: break-word;
+}
+
+dt {
+    font-weight: normal !important;
+}
+
+.data-item dt {
+    margin-bottom: 0.25em;
+}
+
+.required-circle-inner {
+    position: relative;
+    background: #898989;
+    color: #f7f7f7;
+    font-size: 10px;
+    border-radius: 1em;
+    padding: 0 0.5em;
+}
+
+.form-errors-box {
+    background-color: #f2dede;
+    border-radius: 5px;
+    padding: 5px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    color: #a94451;
+}
+
+.top-level-warning-box {
+    background-color: #e9c02c54;
+    border-radius: 5px;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    color: #a37633;
+    border-color: #e1cf9e;
+    border-style: solid;
+}
+
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-hfk9{text-align:left;vertical-align:middle}
+
+/* Help tips */
+.tooltip-circle, .required-circle {
+    margin-left: 3px;
+    display: inline-block;
+    text-align: center;
+}
+
+[data-tooltip], .tooltip-circle {
+    position: relative;
+    cursor: pointer;
+    background: #0870d1;
+    color: white;
+    font-size: 12px;
+    border-radius: 1em;
+    padding: 0 0.5em;
+}
+
+.buttons-holder {
+    display: flex;
+    width: 100%;
+    overflow: scroll;
+}
+
+input:read-only {
+    background: silver;
+}
+
+.buttons-holder div:nth-child(1) {
+    margin-left: 0px;
+}
+
+.buttons-holder div {
+    margin-left: 5px;
+}
+
+@media screen and (min-width: 766px) {
+    .data-item.frame-header {
+        display: block;
+    }
+
+    .data-item .hours {
+        text-align: left;
+    }
+
+    .data-item dl {
+        display: grid;
+        column-gap: 1vw;
+    }
+
+    .data-grid-4 {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); /* 4 cols */
+    }
+
+    .data-grid-5 {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 3fr) minmax(0, 1fr) minmax(0, .1fr); /* 5 cols */
+    }
+
+    .data-grid-6 {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); /* 6 cols */
+    }
+
+    li.data-item {
+        /* On mobile, separate rows by having a faint
+        separator between data-item elements. But we don't want
+        that to show on desktop, so set the border-bottom to 0xpx. */
+        border-bottom: 0px;
+    }
+
+    .data-item .username:before,
+    .data-item .date:before,
+    .data-item .description:before,
+    .data-item .last-login:before,
+    .data-item .date-joined:before,
+    .data-item .last-updated:before,
+    .data-item .email:before,
+    .data-item .userid:before{
+        content: "";
+    }
+
+    .logo1 img, .nav-bar-image {
+        width: 60%;
+        height: 100%;
+    }
+}
+
+.tooltip-circle .tooltip-text {
+    visibility: hidden;
+    width: 160px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 8px 8px 5px;
+    
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+}
+  
+.tooltip-circle:hover .tooltip-text {
+visibility: visible;
+}
