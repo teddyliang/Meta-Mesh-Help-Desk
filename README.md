@@ -12,6 +12,7 @@ Prerequisites:
 Instructions to run:
 - $ git clone {ssh key}
 - cd into the src folder
+- $ pip install -r requirements.txt
 - $ pip install django
 - $ python3 manage.py makemigrations
 - $ python3 manage.py migrate
