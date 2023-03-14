@@ -36,11 +36,11 @@ def search(request):
    query = request.GET.get('q', '')
    result = ""
    if query != '':
-      url = searcher.search(query)
+      url, keywords = searcher.search(query)
       if url is None or url == "no result":
          result = "No matches found"
       else:
-         result = "Closest match: " + url
+         result = "Closest match: " + url + "\n Keywords: " + keywords
    return render(request, 'search.html', {
       "result" : result,
    })
