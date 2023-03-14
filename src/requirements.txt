@@ -47,3 +47,5 @@ webencodings==0.5.1
 whitenoise==6.0.0
 wrapt==1.11.1
 rake-nltk==1.0.6
+keybert==0.7.0
+multi-rake==0.0.2

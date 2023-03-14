@@ -6,16 +6,25 @@ from bs4 import BeautifulSoup
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+# from summa import keywords
+from keybert import KeyBERT
+from multi_rake import Rake
 
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-TOP_N_KEYWORDS = 4
+TOP_N_KEYWORDS = 3
+KEYWORD_PHRASE_MIN_SIZE = 1
+KEYWORD_PHRASE_MAX_SIZE = 2
+
 
 class WebpageSearcher:
     def __init__(self):
         self.links = []
+        print("start\n")
+        self.keywords_model = KeyBERT(model='all-mpnet-base-v2')
+        print("end\n")
 
     def add_link(self, link):
         self.links.append(link)
@@ -26,24 +35,26 @@ class WebpageSearcher:
 
         # Calculate the similarity between the processed query and each link
         similarities = {}
+
         for link in self.links:
+            print("*** iteration")
             processed_link = preprocess_webpage(link)
-            link_keywords = get_keywords(processed_link)
             similarity = calculate_similarity(processed_query, processed_link)
-            similarities[(link, link_keywords)] = similarity
+            similarities[link] = similarity
 
         # Find the link with the highest similarity
-        sorted_links_with_keywords = sorted(similarities, key=similarities.get, reverse=True)
-        most_similar_link_with_keywords = sorted_links_with_keywords[0]
-        print("###############", most_similar_link_with_keywords)
+        sorted_links = sorted(similarities, key=similarities.get, reverse=True)
+        most_similar_link = sorted_links[0]
+        processed_link = preprocess_webpage(link)
+        link_keywords = get_keywords(processed_link, self.keywords_model)
 
         # Return the most similar link, or "no result" if no matching link is found
-        if similarities[most_similar_link_with_keywords] == 0:
+        if similarities[most_similar_link] == 0:
             return "no result", ""
         else:
             # Get keywords as string
-            return most_similar_link_with_keywords
-
+            return (most_similar_link, link_keywords)
+        
 def preprocess_text(text):
     # Tokenize the text into words
     words = nltk.word_tokenize(text)
@@ -92,13 +103,31 @@ def tag_visible(element):
         return False
     return True
 
-def get_keywords(query):
+def get_keywords(query, keywords_model):
+    # # using rake-nlkt
+    # # Create rake object to extract the top keywords from query
+    # rake_object = Rake(min_length = KEYWORD_PHRASE_MIN_SIZE, max_length = KEYWORD_PHRASE_MAX_SIZE, include_repeated_phrases = False)
+    # rake_object.extract_keywords_from_text(query)
+    # top_keywords = rake_object.get_ranked_phrases()[:TOP_N_KEYWORDS]
+    #
+    # # Return top keywords as string separated by commas
+    # return ', '.join(top_keywords)
+
+    # using multi-rake
     # Create rake object to extract the top keywords from query
-    rake_object = Rake()
-    rake_object.extract_keywords_from_text(query)
-    top_keywords = rake_object.get_ranked_phrases()[:TOP_N_KEYWORDS]
+    rake_object = Rake( max_words = KEYWORD_PHRASE_MAX_SIZE)
+    keywords = rake_object.apply(query)
+    top_keywords= list(dict(keywords).keys())[:TOP_N_KEYWORDS]
 
     # Return top keywords as string separated by commas
-    print("!!!!!", top_keywords)
     return ', '.join(top_keywords)
+
+    #using keybert
+    # top_keywords = keywords_model.extract_keywords(query, 
+    #                                  keyphrase_ngram_range = (KEYWORD_PHRASE_MIN_SIZE, KEYWORD_PHRASE_MAX_SIZE), 
+    #                                  highlight = False,
+    #                                  top_n = TOP_N_KEYWORDS)
+    # keywords_list= list(dict(top_keywords).keys())
+    # Return top keywords as string separated by commas
+    # return ', '.join(keywords_list)
 
