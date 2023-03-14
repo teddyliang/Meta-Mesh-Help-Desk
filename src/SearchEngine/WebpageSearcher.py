@@ -5,14 +5,21 @@ from bs4 import BeautifulSoup
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from keybert import KeyBERT
 
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+TOP_N_KEYWORDS = 3
+KEYWORD_PHRASE_MIN_SIZE = 1
+KEYWORD_PHRASE_MAX_SIZE = 2
+
+
 class WebpageSearcher:
     def __init__(self):
         self.links = []
+        self.keywords_model = KeyBERT(model='all-mpnet-base-v2')
 
     def add_link(self, link):
         self.links.append(link)
@@ -23,6 +30,7 @@ class WebpageSearcher:
 
         # Calculate the similarity between the processed query and each link
         similarities = {}
+
         for link in self.links:
             processed_link = preprocess_webpage(link)
             similarity = calculate_similarity(processed_query, processed_link)
@@ -31,13 +39,16 @@ class WebpageSearcher:
         # Find the link with the highest similarity
         sorted_links = sorted(similarities, key=similarities.get, reverse=True)
         most_similar_link = sorted_links[0]
+        processed_link = preprocess_webpage(link)
+        link_keywords = get_keywords(processed_link, self.keywords_model)
 
         # Return the most similar link, or "no result" if no matching link is found
         if similarities[most_similar_link] == 0:
-            return "no result"
+            return "no result", ""
         else:
-            return most_similar_link
-
+            # Get keywords as string
+            return (most_similar_link, link_keywords)
+        
 def preprocess_text(text):
     # Tokenize the text into words
     words = nltk.word_tokenize(text)
@@ -85,3 +96,14 @@ def tag_visible(element):
     if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
         return False
     return True
+
+def get_keywords(query, keywords_model):
+    #using the keybert package, extract top keywords from query
+    top_keywords = keywords_model.extract_keywords(query, 
+                                     keyphrase_ngram_range = (KEYWORD_PHRASE_MIN_SIZE, KEYWORD_PHRASE_MAX_SIZE), 
+                                     highlight = False,
+                                     top_n = TOP_N_KEYWORDS)
+    keywords_list= list(dict(top_keywords).keys())
+
+    # Return top keywords as string separated by commas
+    return ', '.join(keywords_list)
