@@ -1,14 +1,11 @@
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-from rake_nltk import Rake
 from bs4 import BeautifulSoup
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-# from summa import keywords
 from keybert import KeyBERT
-from multi_rake import Rake
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -110,4 +107,3 @@ def get_keywords(query, keywords_model):
 
     # Return top keywords as string separated by commas
     return ', '.join(keywords_list)
-
