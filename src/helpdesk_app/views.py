@@ -34,15 +34,20 @@ searcher.add_link("https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-o
 def search(request):
    # TODO: This should be made async
    query = request.GET.get('q', '')
-   result = ""
+   
+   url_result = ""
+   keywords_result = ""
    if query != '':
       url, keywords = searcher.search(query)
       if url is None or url == "no result":
-         result = "No matches found"
+         url_result = "No matches found"
       else:
-         result = "Closest match: " + url + "\n Keywords: " + keywords
+         url_result = url
+         keywords_result = keywords
+
    return render(request, 'search.html', {
-      "result" : result,
+      "url_result" : url_result,
+      "keywords_result" : keywords_result,
    })
 
 @login_required

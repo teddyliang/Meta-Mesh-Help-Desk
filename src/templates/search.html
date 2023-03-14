@@ -32,10 +32,12 @@
         <div class="logo">
             <img alt="Google" src="{% static 'helpdesk_app/img/logo.png' %}">
         </div>
-        {% if result != '' %}
+        {% if url_result != '' %}
             <div class="search_result">
                 <h2>Result</h2>
-                {{ result }}
+                <b>Closest Match: </b><a href="{{ url_result }}" target="_blank">{{ url_result }}</a>
+                <br/>
+                <b>Keywords: </b>{{ keywords_result }}
                 <br/>
                 <br/>
                 <a href="{% url 'home' %}">Try another search...</a>

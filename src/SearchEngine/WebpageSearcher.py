@@ -22,9 +22,7 @@ KEYWORD_PHRASE_MAX_SIZE = 2
 class WebpageSearcher:
     def __init__(self):
         self.links = []
-        print("start\n")
         self.keywords_model = KeyBERT(model='all-mpnet-base-v2')
-        print("end\n")
 
     def add_link(self, link):
         self.links.append(link)
