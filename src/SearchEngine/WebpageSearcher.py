@@ -37,7 +37,6 @@ class WebpageSearcher:
         similarities = {}
 
         for link in self.links:
-            print("*** iteration")
             processed_link = preprocess_webpage(link)
             similarity = calculate_similarity(processed_query, processed_link)
             similarities[link] = similarity
@@ -104,30 +103,13 @@ def tag_visible(element):
     return True
 
 def get_keywords(query, keywords_model):
-    # # using rake-nlkt
-    # # Create rake object to extract the top keywords from query
-    # rake_object = Rake(min_length = KEYWORD_PHRASE_MIN_SIZE, max_length = KEYWORD_PHRASE_MAX_SIZE, include_repeated_phrases = False)
-    # rake_object.extract_keywords_from_text(query)
-    # top_keywords = rake_object.get_ranked_phrases()[:TOP_N_KEYWORDS]
-    #
-    # # Return top keywords as string separated by commas
-    # return ', '.join(top_keywords)
-
-    # using multi-rake
-    # Create rake object to extract the top keywords from query
-    rake_object = Rake( max_words = KEYWORD_PHRASE_MAX_SIZE)
-    keywords = rake_object.apply(query)
-    top_keywords= list(dict(keywords).keys())[:TOP_N_KEYWORDS]
+    #using the keybert package, extract top keywords from query
+    top_keywords = keywords_model.extract_keywords(query, 
+                                     keyphrase_ngram_range = (KEYWORD_PHRASE_MIN_SIZE, KEYWORD_PHRASE_MAX_SIZE), 
+                                     highlight = False,
+                                     top_n = TOP_N_KEYWORDS)
+    keywords_list= list(dict(top_keywords).keys())
 
     # Return top keywords as string separated by commas
-    return ', '.join(top_keywords)
-
-    #using keybert
-    # top_keywords = keywords_model.extract_keywords(query, 
-    #                                  keyphrase_ngram_range = (KEYWORD_PHRASE_MIN_SIZE, KEYWORD_PHRASE_MAX_SIZE), 
-    #                                  highlight = False,
-    #                                  top_n = TOP_N_KEYWORDS)
-    # keywords_list= list(dict(top_keywords).keys())
-    # Return top keywords as string separated by commas
-    # return ', '.join(keywords_list)
+    return ', '.join(keywords_list)
 
