@@ -12,7 +12,7 @@ nltk.download('wordnet')
 
 ERROR_MESSAGE = "Acceptable ! appropriate representation requested resource could found server . error generated Mod_Security ."
 KEYWORD_WIEGHT = 2
-SEARCH_LIST_LEN = 1
+SEARCH_LIST_LEN = 5
 
 
 class WebpageSearcher:
