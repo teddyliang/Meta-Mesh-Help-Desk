@@ -1,5 +1,6 @@
 from WebpageSearcher import WebpageSearcher
 
+
 def main():
     # Create a new WebpageSearcher object
     searcher = WebpageSearcher()
@@ -9,7 +10,6 @@ def main():
     searcher.add_link("https://seniornet.org/")
     searcher.add_link("https://www.bbcgoodfood.com/recipes/easy-vanilla-cake")
     searcher.add_link("https://www.delish.com/cooking/recipe-ideas/a27081036/easy-homemade-vanilla-cake-recipe/")
-    
 
     # Get input from the user
     while True:
@@ -23,6 +23,7 @@ def main():
             print("No relevant URLs found.")
         else:
             print("The most relevant URL for the query '{}' is: {}".format(query, url))
+
 
 if __name__ == "__main__":
     main()
