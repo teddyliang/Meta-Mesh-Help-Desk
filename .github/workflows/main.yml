@@ -1,0 +1,14 @@
+name: Run helpdesk tests
+on: [pull_request, push]
+jobs:
+  test_project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+      - run: pip install flake8==4.0.0
+      - run: pip install -r src/requirements.txt # Install all project dependencies
+      - run: cd src && python manage.py test # Run Django tests
+      - run: flake8 src/helpdesk_app # Run flake8 linter
+      - run: flake8 src/helpdesk_proj # Run flake8 linter
+      - run: flake8 src/SearchEngine # Run flake8 linter
