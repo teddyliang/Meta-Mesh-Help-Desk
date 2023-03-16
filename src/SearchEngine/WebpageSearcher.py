@@ -14,6 +14,7 @@ ERROR_MESSAGE = "Acceptable ! appropriate representation requested resource coul
 KEYWORD_WIEGHT = 2
 SEARCH_LIST_LEN = 5
 
+
 class WebpageSearcher:
     def __init__(self):
         self.links = []
