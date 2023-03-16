@@ -9,6 +9,6 @@ jobs:
       - run: pip install flake8==4.0.0
       - run: pip install -r src/requirements.txt # Install all project dependencies
       - run: cd src && python manage.py test # Run Django tests
-      - run: flake8 src/helpdesk_app # Run flake8 linter
-      - run: flake8 src/helpdesk_proj # Run flake8 linter
-      - run: flake8 src/SearchEngine # Run flake8 linter
+      - run: cd src && flake8 helpdesk_app # Run flake8 linter
+      - run: cd src && flake8 helpdesk_proj # Run flake8 linter
+      - run: cd src && flake8 SearchEngine # Run flake8 linter

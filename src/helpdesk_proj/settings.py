@@ -1,7 +1,4 @@
 import os
-import logging
-import sys
-from decouple import config
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -9,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # This SECRET_KEY must be changed!
 SECRET_KEY = 'f867a25e39a5214669e06ba9e0d3bc94e6920c02d0159d67e05491ef6ecfd96d'
-DEBUG = True # This should always be False in production!
+DEBUG = True  # This should always be False in production!
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'helpdesk-vht.herokuapp.com']
 
 PAGINATOR_COUNT = 8
@@ -146,10 +143,10 @@ LOGGING = {
         }
     },
     'handlers': {
-    'null': {
+        'null': {
             'level': 'DEBUG',
             'class': 'logging.NullHandler',
-    },
+        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -157,7 +154,7 @@ LOGGING = {
         }
     },
     'loggers': {
-    'ex_logger': {
+        'ex_logger': {
             'handlers': ['console', ],
             'level': 'INFO',
         }

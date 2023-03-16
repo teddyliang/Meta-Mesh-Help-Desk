@@ -24,6 +24,8 @@ urlpatterns = [
     path('accounts/', views.accounts, name="accounts"),
     path('account', views.account_redirect, name="account_redirect"),
     path('account/<int:id>', views.account, name="account"),
-    path('update_profile/<int:id>', views.update_profile, name="update_profile"),
+    path('update_profile/<int:id>', views.update_profile,
+         name="update_profile"
+         ),
     path('update_account/', views.update_account, name="update_account"),
 ]

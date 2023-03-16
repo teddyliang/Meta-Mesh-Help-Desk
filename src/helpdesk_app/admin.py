@@ -10,6 +10,7 @@ class ProfileInline(admin.StackedInline):
     verbose_name_plural = 'Profile'
     fk_name = 'user'
 
+
 class CustomUserAdmin(UserAdmin):
     inlines = (ProfileInline, )
 
@@ -17,6 +18,7 @@ class CustomUserAdmin(UserAdmin):
         if not obj:
             return list()
         return super(CustomUserAdmin, self).get_inline_instances(request, obj)
+
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)

@@ -10,6 +10,7 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+
 class WebpageSearcher:
     def __init__(self):
         self.links = []
@@ -38,6 +39,7 @@ class WebpageSearcher:
         else:
             return most_similar_link
 
+
 def preprocess_text(text):
     # Tokenize the text into words
     words = nltk.word_tokenize(text)
@@ -55,6 +57,7 @@ def preprocess_text(text):
 
     return preprocessed_text
 
+
 def preprocess_webpage(url):
     # Scrape the webpage
     page = requests.get(url)
@@ -70,6 +73,7 @@ def preprocess_webpage(url):
 
     return preprocessed_webpage
 
+
 def calculate_similarity(query, webpage):
     # Create a TfidfVectorizer object and fit it to the query and webpage
     vectorizer = TfidfVectorizer()
@@ -79,6 +83,7 @@ def calculate_similarity(query, webpage):
     similarity = cosine_similarity(vectorizer.transform([query]), vectorizer.transform([webpage]))[0][0]
 
     return similarity
+
 
 def tag_visible(element):
     # Ignore invisible elements (e.g. scripts, styles)
