@@ -1,0 +1,86 @@
+{% load static %}
+{% load template_tags %}
+<!DOCTYPE html>
+<html lang="en">
+{% block pageHeader %} 
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">   
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+      {% get_company_name "short" %} Admin Panel
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+        name='viewport'/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/main.css' %}">
+    <script src="{% static 'helpdesk_app/js/linkify.js' %}"></script>
+</head>
+{% endblock pageHeader%}
+<body>
+  <nav class="navbar navbar-inverse visible-xs">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'home' %}"><img class=" nav-bar-image" src="{% static 'helpdesk_app/img/logo.png' %}"></a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><h5 class="navbar-user">{% get_company_name "short" %} Helpdesk Panel</h5></li>
+          {% if user.is_authenticated %}
+            <li><h5 class="navbar-user"><i>Welcome, {{ user.username }}</i></h5></li>
+          {% endif %}
+          <li {% if request.resolver_match.url_name == 'home' or request.resolver_match.url_name == 'search' %}class="active"{% endif %}><a href="{% url 'home' %}">Search</a></li>
+          {% if user.is_authenticated %}
+            <li {% if request.resolver_match.url_name == 'accounts' %}class="active"{% endif %}><a href="{% url 'accounts' %}">All Staff</a></li>
+            <li {% if request.resolver_match.url_name == 'account' or request.resolver_match.url_name == 'update_account' %}class="active"{% endif %}><a href="{% url 'account_redirect' %}">Account</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Staff Login</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <div class="row content">
+      <div class="col-sm-3 sidenav hidden-xs sidebar">
+        <div class = "logo1">
+          <img class=" nav-bar-image" style="margin-left: 35px" src="{% static 'helpdesk_app/img/logo.png' %}">
+        </div>
+
+        <ul class="nav nav-pills nav-stacked">
+          <li><h5 class="navbar-user">{% get_company_name "short" %} Helpdesk Admin Panel</h5></li>
+          {% if user.is_authenticated %}
+            <li><h5 class="navbar-user"><i>Welcome, {{ user.username }}</i></h5></li>
+          {% endif %}
+          <li {% if request.resolver_match.url_name == 'home' or request.resolver_match.url_name == 'search' %}class="active"{% endif %}><a href="{% url 'home' %}">Search</a></li>
+          {% if user.is_authenticated %}
+            <li {% if request.resolver_match.url_name == 'accounts' %}class="active"{% endif %}><a href="{% url 'accounts' %}">All Staff</a></li>
+            <li {% if request.resolver_match.url_name == 'account' or request.resolver_match.url_name == 'update_account' %}class="active"{% endif %}><a href="{% url 'account_redirect' %}">Account</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %}
+        </ul><br>
+      </div>
+      <br>{% block pageContent %}{% endblock pageContent %}
+    </div>
+  </div>
+</body>
+<scripts>
+<scripts>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</scripts>
+{% block pageScripts %} {% endblock pageScripts %}
+</html>

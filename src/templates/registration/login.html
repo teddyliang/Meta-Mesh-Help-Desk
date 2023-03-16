@@ -1,0 +1,54 @@
+{% load static %}
+{% load template_tags %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Helpdesk - Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/login.css' %}">
+</head>
+{% block pageContent %}
+<main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+    <div class="container">
+      <div class="card login-card">
+        <div class="row no-gutters">
+          <div class="col-md-5">
+            <img src="{% static 'helpdesk_app/img/login.jpg' %}" alt="login" class="login-card-img">
+          </div>
+          <div class="col-md-7">
+            <div class="card-body">
+              <div class="brand-wrapper">
+                <img src="{% static 'helpdesk_app/img/logo.png' %}" alt="logo" class="logo">
+              </div>
+              <p class="login-card-description">Sign in to your account</p>
+              {% include 'messages.html' %}
+              <form method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <label for="id_username" class="sr-only">Username</label>
+                      <input class="form-control" placeholder="Username" autofocus="autofocus" autocomplete="username" name="username" id="id_username" required>
+                  </div>
+                  <div class="form-group mb-4">
+                      <label for="password" class="sr-only">Password</label>
+                      <input class="form-control" placeholder="Password" autocomplete="current-password" type="password" name="password" id="id_password" required>
+                  </div>
+                  {% if form.non_field_errors %}
+                    <div class="non-field-errors">
+                      {% for err in form.non_field_errors %}
+                        <p class="form-error">{{ err }}</p>
+                      {% endfor %}
+                    </div>
+                    <br/>
+                  {% endif %}
+                  <button type="submit" style="background-color: #808080" class="btn btn-block login-btn mb-4">Login</button>
+              </form>
+              <p class="login-card-footer-text">Don't have an account? Speak to {% get_company_name "short" %} staff to get you started!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</main>
+{% endblock %}

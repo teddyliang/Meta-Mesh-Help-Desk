@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% load template_tags %}
+{% block pageContent %}
+   <div class="col-sm custom-grid">
+      <div class="well">
+         <div class="top-header">
+               <div>
+                  <a href="{% url 'account' id=request.resolver_match.kwargs.id %}">Back to account</a>
+                  <h4>Update data</h4>
+                  {% include 'messages.html' %}
+                  <div class="tools"></div>  
+               </div>
+         </div>
+         <form method="post">
+            {% csrf_token %}
+            <div class="align-fields-general" style="margin:unset;">
+               {% for field in profile_form %}
+                  <p>
+                     <div class="align-labels">
+                        {% if field.field.required %}
+                           {{ field.label_tag }}
+                           <div class="required-circle"><p class="required-circle-inner">Required</p></div>
+                        {% else %}
+                           {{ field.label_tag }}
+                        {% endif %}
+                        <br/>
+                     </div>
+                     <div class="align-fields">
+                        {{ field }} 
+                     </div>
+                  </p>
+               {% endfor %}
+               <button class="btn btn-primary px-2 m-3" type="Submit">Save Changes</button>
+         </form>
+      </div>
+   </div>
+{% endblock pageContent%}

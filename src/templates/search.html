@@ -1,0 +1,55 @@
+{% load static %}
+{% load template_tags %}
+{% block pageContent %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">   
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>
+          {% get_company_name "short" %} Helpdesk
+        </title>
+        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+            name='viewport'/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/search.css' %}">
+        <script src="{% static 'helpdesk_app/js/linkify.js' %}"></script>
+    </head>
+
+    <center>
+        <header>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a class="links" href="{% url 'logout' %}"><button class="signbutton" type="button">Logout</button></a></li>
+                    <li><a href="{% url 'account_redirect' %}">Admin Panel</a></li>
+                {% else %}
+                    <li><a class="links" href="{% url 'login' %}"><button class="signbutton" type="button">Staff Login</button></a></li>
+                {% endif %}
+            </ul>  
+        </header>
+        <div class="logo">
+            <img alt="Google" src="{% static 'helpdesk_app/img/logo.png' %}">
+        </div>
+        {% if result != '' %}
+            <div class="search_result">
+                <h2>Result</h2>
+                {{ result }}
+                <br/>
+                <br/>
+                <a href="{% url 'home' %}">Try another search...</a>
+            </div>
+        {% else %}
+            <form action="{% url 'home' %}" method="get">
+                <div class="bar">
+                    <input class="searchbar" type="text" title="Search" name="q">
+                </div>
+                <div class="buttons">
+                    <input class="button" type="submit" value="Search"></input>
+                </div>
+            </form>
+        {% endif %}
+    </center>
+</html>
+{% endblock pageContent%}
