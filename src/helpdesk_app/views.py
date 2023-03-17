@@ -30,7 +30,7 @@ def search(request):
     query = request.GET.get('q', '')
     result = ""
     if query != '':
-        url = searcher.search(query)[0] # Only displaying the first result for now
+        url = searcher.search(query)[0]  # Only displaying the first result for now
         if url is None or url == "no result":
             result = "No matches found"
         else:

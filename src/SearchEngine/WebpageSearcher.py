@@ -1,3 +1,15 @@
+# The WebSearcher class is a model that allows users to create a searchable
+# database of specific websites. It uses a combination of webscraping and manually
+# typed key words to search through the links. Basically like google but only with
+# the links you allow.
+#
+# To use,
+#
+#   1. Start with instantiating a WebSearcher object, eg: searcher = WebpageSearcher()
+#   2. Add any amount of links you want to search, eg: searcher.add_link('http://www.google', keyword='google')
+#   3. Once you have added all the links, you can run the search() method, eg: searcher.search('google')
+
+
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -10,9 +22,11 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-
+# Error message from browser when webscraping fails
 ERROR_MESSAGE = "Acceptable ! appropriate representation requested resource could found server . error generated Mod_Security ."
+# Determines how much the key words matter when searching links
 KEYWORD_WIEGHT = 2
+# Determines how many results should be returned
 SEARCH_LIST_LEN = 5
 
 
@@ -22,42 +36,46 @@ class WebpageSearcher:
 
     def add_link(self, link, keywords=""):
         # webscrape the link
-        processed_link = preprocess_webpage(link)
+        try:
+            processed_link = preprocess_webpage(link)
+        except:
+            return False
 
-        # Check for Errors
-        if (processed_link == ERROR_MESSAGE or processed_link == None or processed_link == ''):
-            return False, processed_link
-        
         self.links.append([processed_link, link, preprocess_text(keywords)])
-        return True, processed_link
+        # Check for Errors
+        if (processed_link is None or processed_link == ERROR_MESSAGE or processed_link == ''):
+            return False
+
+        return True
 
     def search(self, query):
         # Use natural language processing to process the query
         processed_query = preprocess_text(query)
-        print(query)
+
+        if (processed_query is None or processed_query == ''):
+            return ["no result"]
 
         # Calculate the similarity between the processed query and each link
         similarities = {}
         for link in self.links:
             processed_link = link[0]
             keywords = link[2]
-            similarity = (calculate_similarity(processed_query, processed_link) +
-                        calculate_similarity(processed_query, keywords) * KEYWORD_WIEGHT)
+            similarity = (calculate_similarity(processed_query, processed_link) + calculate_similarity(processed_query, keywords) * KEYWORD_WIEGHT)
             if (similarity > 0):
                 similarities[link[1]] = similarity
 
         if len(similarities) == 0:
-            return "no result"
+            return ["no result"]
 
         # Find the link with the highest similarity
         sorted_links = sorted(similarities, key=similarities.get, reverse=True)
-        most_similar_link = sorted_links[0]
 
         # Return the most similar link
         if len(sorted_links) > SEARCH_LIST_LEN:
             return sorted_links[:SEARCH_LIST_LEN]
         else:
-            return most_similar_link
+            return sorted_links
+
 
 def preprocess_text(text):
     # Tokenize the text into words
@@ -90,6 +108,7 @@ def preprocess_webpage(url):
     preprocessed_webpage = preprocess_text(webpage_text)
 
     return preprocessed_webpage
+
 
 def calculate_similarity(query, subject):
     # Create a TfidfVectorizer object and fit it to the query and subject
