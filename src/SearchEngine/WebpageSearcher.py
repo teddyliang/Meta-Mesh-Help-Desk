@@ -10,6 +10,7 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+
 ERROR_MESSAGE = "Acceptable ! appropriate representation requested resource could found server . error generated Mod_Security ."
 KEYWORD_WIEGHT = 2
 SEARCH_LIST_LEN = 5
@@ -33,6 +34,7 @@ class WebpageSearcher:
     def search(self, query):
         # Use natural language processing to process the query
         processed_query = preprocess_text(query)
+        print(query)
 
         # Calculate the similarity between the processed query and each link
         similarities = {}
@@ -55,7 +57,7 @@ class WebpageSearcher:
         if len(sorted_links) > SEARCH_LIST_LEN:
             return sorted_links[:SEARCH_LIST_LEN]
         else:
-            return sorted_links
+            return most_similar_link
 
 def preprocess_text(text):
     # Tokenize the text into words
@@ -72,6 +74,7 @@ def preprocess_text(text):
     # Rejoin the words into a single string
     preprocessed_text = " ".join(lemmed_words)
     return preprocessed_text
+
 
 def preprocess_webpage(url):
     # Scrape the webpage
@@ -97,6 +100,7 @@ def calculate_similarity(query, subject):
     similarity = cosine_similarity(vectorizer.transform([query]), vectorizer.transform([subject]))[0][0]
 
     return similarity
+
 
 def tag_visible(element):
     # Ignore invisible elements (e.g. scripts, styles)
