@@ -17,7 +17,6 @@ def main():
     check_webscraping()
     check_keywords()
     check_extraneous_inputs()
-    print("All tests passed!")
 
 
 # Checks if the webscraping is working
