@@ -29,4 +29,5 @@ urlpatterns = [
          ),
     path('update_account/', views.update_account, name="update_account"),
     path('new_resource/', views.new_resource, name="new_resource"),
+    path('resources/', views.view_resources, name="resources"),
 ]

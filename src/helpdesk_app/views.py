@@ -1,6 +1,7 @@
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from django.shortcuts import render, redirect
 from .forms import ProfileForm, SignUpForm, ResourceForm
+from .models import AnswerResource
 from django.conf import settings
 # Flash messages
 from django.contrib import messages
@@ -10,7 +11,7 @@ from django.contrib.auth.models import User
 # Paginator
 from django.core.paginator import Paginator
 # Filters
-from .filters import UserFilter
+from .filters import UserFilter, ResourceFilter
 # Logging
 import logging
 logger = logging.getLogger('ex_logger')
@@ -169,13 +170,27 @@ def new_resource(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Resource created successfully')
-            return redirect('/home')  # TODO in future commit: redirect back to resources page instead
+            return redirect('/resources')
         else:
-            messages.error(request, 'Invalid form submission.')
-            return redirect('/home')  # TODO in future commit: redirect back to resources page instead
+            return render(request, "new_resource.html", {
+                "form": form
+            })
     else:
         # Render new form
         form = ResourceForm()
         return render(request, "new_resource.html", {
             "form": form
         })
+
+
+@login_required
+def view_resources(request):
+    records = AnswerResource.objects.all().order_by('-updated')
+
+    myFilter = ResourceFilter(request.GET, queryset=records)
+    records = myFilter.qs
+
+    paginator = Paginator(records, settings.PAGINATOR_COUNT + 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "resources.html", {"page_obj": page_obj, 'myFilter': myFilter, 'user': request.user})
