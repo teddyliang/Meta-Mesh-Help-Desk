@@ -1,6 +1,6 @@
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from django.shortcuts import render, redirect
-from .forms import ProfileForm, SignUpForm
+from .forms import ProfileForm, SignUpForm, ResourceForm
 from django.conf import settings
 # Flash messages
 from django.contrib import messages
@@ -159,3 +159,23 @@ def signup(request):
     else:
         messages.error(request, 'You do not have permission to do that.')
         return redirect('/home')
+
+
+@login_required
+def new_resource(request):
+    if request.method == "POST":
+        # Create
+        form = ResourceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Resource created successfully')
+            return redirect('/home')  # TODO in future commit: redirect back to resources page instead
+        else:
+            messages.error(request, 'Invalid form submission.')
+            return redirect('/home')  # TODO in future commit: redirect back to resources page instead
+    else:
+        # Render new form
+        form = ResourceForm()
+        return render(request, "new_resource.html", {
+            "form": form
+        })

@@ -19,7 +19,7 @@ class Profile(models.Model):
 # Model to represent resources
 class AnswerResource(models.Model):
     # Short title to describe the resource (required)
-    title = models.CharField(max_length=100, blank=False, null=False)
+    title = models.CharField(max_length=75, blank=False, null=False)
     # URL associated with the resource (required, must be unique)
     url = models.URLField(max_length=1000, unique=True, blank=False, null=False)
     # Blurb to describe the resource (required)
