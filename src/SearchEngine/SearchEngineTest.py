@@ -10,13 +10,15 @@ def main():
     # Add some links to the database
     assert searcher.add_link("https://techboomers.com/", keywords="computers, tech, old people")
     assert searcher.add_link("https://www.bbcgoodfood.com/recipes/easy-vanilla-cake", keywords="baking")
-    assert searcher.add_link("https://www.espn.com/", keywords="soccer")
+    assert searcher.add_link("https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-blindfolded-tutorial/", keywords="soccer")
     assert not searcher.add_link("https://seniornet.org/", keywords="computers")
     assert not searcher.add_link("https://skjfnljeqbf", keywords="")
 
     check_webscraping()
     check_keywords()
     check_extraneous_inputs()
+
+    print("All tests passed!")
 
 
 # Checks if the webscraping is working
@@ -25,8 +27,8 @@ def check_webscraping():
     assert searcher.search("entertainment")[0] == "https://techboomers.com/"
     assert searcher.search("recipes")[0] == "https://www.bbcgoodfood.com/recipes/easy-vanilla-cake"
     assert searcher.search("vanilla")[0] == "https://www.bbcgoodfood.com/recipes/easy-vanilla-cake"
-    assert searcher.search("espn")[0] == "https://www.espn.com/"
-    assert searcher.search("bundesliga")[0] == "https://www.espn.com/"
+    assert searcher.search("rubiks cube")[0] == "https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-blindfolded-tutorial/"
+    assert searcher.search("algorithm")[0] == "https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-blindfolded-tutorial/"
 
 
 # checks if the keywords are working
@@ -34,7 +36,7 @@ def check_keywords():
     assert searcher.search("tech")[0] == "https://techboomers.com/"
     assert searcher.search("old people")[0] == "https://techboomers.com/"
     assert searcher.search("baking")[0] == "https://www.bbcgoodfood.com/recipes/easy-vanilla-cake"
-    assert searcher.search("soccer")[0] == "https://www.espn.com/"
+    assert searcher.search("soccer")[0] == "https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-blindfolded-tutorial/"
 
 
 # checks if the extraneous inputs cause errors
