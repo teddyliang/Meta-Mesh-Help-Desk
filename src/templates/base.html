@@ -40,6 +40,7 @@
           {% endif %}
           <li {% if request.resolver_match.url_name == 'home' or request.resolver_match.url_name == 'search' %}class="active"{% endif %}><a href="{% url 'home' %}">Search</a></li>
           {% if user.is_authenticated %}
+            <li {% if request.resolver_match.url_name == 'resources' or request.resolver_match.url_name == 'new_resource' or request.resolver_match.url_name == 'update_resource' %}class="active"{% endif %}><a href="{% url 'resources' %}">Resources</a></li>
             <li {% if request.resolver_match.url_name == 'accounts' %}class="active"{% endif %}><a href="{% url 'accounts' %}">All Staff</a></li>
             <li {% if request.resolver_match.url_name == 'account' or request.resolver_match.url_name == 'update_account' %}class="active"{% endif %}><a href="{% url 'account_redirect' %}">Account</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
@@ -64,6 +65,7 @@
           {% endif %}
           <li {% if request.resolver_match.url_name == 'home' or request.resolver_match.url_name == 'search' %}class="active"{% endif %}><a href="{% url 'home' %}">Search</a></li>
           {% if user.is_authenticated %}
+            <li {% if request.resolver_match.url_name == 'resources' or request.resolver_match.url_name == 'new_resource' or request.resolver_match.url_name == 'update_resource' %}class="active"{% endif %}><a href="{% url 'resources' %}">Resources</a></li>
             <li {% if request.resolver_match.url_name == 'accounts' %}class="active"{% endif %}><a href="{% url 'accounts' %}">All Staff</a></li>
             <li {% if request.resolver_match.url_name == 'account' or request.resolver_match.url_name == 'update_account' %}class="active"{% endif %}><a href="{% url 'account_redirect' %}">Account</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>

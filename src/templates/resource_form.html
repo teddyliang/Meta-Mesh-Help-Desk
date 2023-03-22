@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% load template_tags %}
+{% block pageContent %}
+    <div class="col-sm custom-grid">
+        <div class="well">
+            <div class="top-header">
+                <div>
+                    <a href="{% url 'resources' %}">View all resources</a>
+                    <div class="tools"></div>  
+                </div>
+            </div>
+            {% include 'messages.html' %}
+            <form method="POST" id="form" style="width: 0%;"> {% csrf_token %}
+                <div class="align-fields-general">
+                    {% if request.resolver_match.url_name == "update_resource" %}
+                        <h4 class="pad-me"><b>Update resource</b></h4>
+                        <div class="button-holder custom-margins">
+                            <a href="{% url 'delete_resource' id=request.resolver_match.kwargs.id %}" onclick="return confirm('Are you sure you would like to delete this resource?')"><p class="btn px-2 m-3 danger">Delete</p></a>
+                        </div>
+                        <br/>
+                        <div class="tools"></div>
+                    {% else %}
+                        <h4 class="pad-me"><b>New resource</b></h4>
+                    {% endif %}
+                    {% for field in form %}
+                    <p>
+                        <div class="align-labels">
+                            {% if field.field.required %}
+                                {{ field.label_tag }}
+                                <div class="required-circle"><p class="required-circle-inner">Required</p></div>
+                            {% else %}
+                                {{ field.label_tag }}
+                            {% endif %} <br/>
+                        </div>
+                        <div class="align-fields">
+                            {% if field.errors %}
+                                <div class="form-errors-box">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                            {{ field }}
+                        </div>
+                    </p>
+                    {% endfor %}
+        
+                </div>
+                
+                <div class="align-fields button-holder custom-margins"></div>
+                    <br/>
+                    <br/>
+                    <button class="btn wide-btn btn-primary" type="submit" form="form">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock pageContent%}

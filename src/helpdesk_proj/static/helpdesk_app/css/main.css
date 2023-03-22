@@ -255,6 +255,18 @@ dl {
     content: "Description: ";
 }
 
+.data-item .blurb:before {
+    content: "Blurb: ";
+}
+
+.data-item .url:before {
+    content: "URL: ";
+}
+
+.data-item .keywords:before {
+    content: "Keywords: ";
+}
+
 .data-item .email:before {
     content: "Email: ";
 }
@@ -396,6 +408,9 @@ input:read-only {
     .data-item .username:before,
     .data-item .date:before,
     .data-item .description:before,
+    .data-item .blurb:before,
+    .data-item .url:before,
+    .data-item .keywords:before,
     .data-item .last-login:before,
     .data-item .date-joined:before,
     .data-item .last-updated:before,

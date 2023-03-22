@@ -1,6 +1,11 @@
+# Time
+import datetime
+from django.utils import timezone
+# Django
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from django.shortcuts import render, redirect
-from .forms import ProfileForm, SignUpForm
+from .forms import ProfileForm, SignUpForm, ResourceForm
+from .models import AnswerResource
 from django.conf import settings
 # Flash messages
 from django.contrib import messages
@@ -10,7 +15,7 @@ from django.contrib.auth.models import User
 # Paginator
 from django.core.paginator import Paginator
 # Filters
-from .filters import UserFilter
+from .filters import UserFilter, ResourceFilter
 # Logging
 import logging
 logger = logging.getLogger('ex_logger')
@@ -159,3 +164,84 @@ def signup(request):
     else:
         messages.error(request, 'You do not have permission to do that.')
         return redirect('/home')
+
+
+@login_required
+def new_resource(request):
+    if request.method == "POST":
+        # Create
+        form = ResourceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Resource created successfully')
+            return redirect('/resources')
+        else:
+            return render(request, "resource_form.html", {
+                "form": form
+            })
+    else:
+        # Render new form
+        form = ResourceForm()
+        return render(request, "resource_form.html", {
+            "form": form
+        })
+
+
+@login_required
+def update_resource(request, id):
+    record = None
+    try:
+        record = AnswerResource.objects.get(id=id)
+    except:
+        messages.error(request, 'This resource does not exist.')
+        return redirect('/resources')
+
+    if request.method == "POST":
+        resource_form = ResourceForm(request.POST, instance=record)
+        if resource_form.is_valid():
+            record = resource_form.save()
+            record.updated = datetime.datetime.now(tz=timezone.utc)
+            record.save()
+            messages.success(request, 'Resource updated successfully.')
+            return redirect('/resources')
+        else:
+            return render(request, "resource_form.html", {
+                "form": resource_form
+            })
+    else:
+        resource_form = ResourceForm(instance=record)
+
+        return render(request, 'resource_form.html', {
+            'form': resource_form,
+        })
+
+
+@login_required
+def delete_resource(request, id):
+    record = None
+    try:
+        record = AnswerResource.objects.get(id=id)
+    except:
+        messages.error(request, 'Invalid resource.')
+        return redirect('/resources')
+
+    try:
+        record.delete()
+        messages.success(request, 'Resource deleted successfully.')
+        return redirect('/resources')
+    except Exception as e:
+        messages.error(request, 'Deletion failed, see error: ' + str(e))
+    return redirect('/resources')
+
+
+@login_required
+def view_resources(request):
+    records = AnswerResource.objects.all().order_by('-updated')
+
+    myFilter = ResourceFilter(request.GET, queryset=records)
+    records = myFilter.qs
+
+    paginator = Paginator(records, settings.PAGINATOR_COUNT + 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "resources.html", {"page_obj": page_obj, "myFilter": myFilter, "user": request.user})

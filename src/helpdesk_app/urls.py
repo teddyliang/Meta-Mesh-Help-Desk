@@ -28,4 +28,8 @@ urlpatterns = [
          name="update_profile"
          ),
     path('update_account/', views.update_account, name="update_account"),
+    path('new_resource/', views.new_resource, name="new_resource"),
+    path('update_resource/<int:id>', views.update_resource, name="update_resource"),
+    path('delete_resource/<int:id>', views.delete_resource, name="delete_resource"),
+    path('resources/', views.view_resources, name="resources"),
 ]
