@@ -1,10 +1,10 @@
-from helpdesk_app.views import search, new_resource
+from helpdesk_app.views import autocomplete_search, new_resource
 from helpdesk_app.models import AnswerResource, Category
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 
-class SearchTests(TestCase):
+class AutocompleteTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         # Create an admin user to test with
@@ -36,74 +36,74 @@ class SearchTests(TestCase):
         setattr(request, '_messages', FallbackStorage(request))
         new_resource(request)
 
+        # Create second sample resource
+        request = self.factory.post(
+            '/new_resource/',
+            data = {
+                'title': 'How to Properly Restart a Router and Modem',
+                'url': 'https://www.lifewire.com/how-to-properly-restart-a-router-modem-2624570',
+                'blurb': 'steps to restart a router and modem',
+                'tags': 'router, modem, restart',
+                'categories': [str(self.sample_category2.id)]
+
+            }
+        )
+        # Submit the second request
+        request.user = self.user
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
+        new_resource(request)
+
     def test_resource_created(self):
         # Ensures the setup was successful
-        self.assertEquals(AnswerResource.objects.all().count(), 1)
+        self.assertEquals(AnswerResource.objects.all().count(), 2)
         self.assertEquals(len(list(AnswerResource.objects.first().tags.names())), 3)
 
-    def test_search_valid_result(self):
+    def test_autocomplete_existing_result(self):
         # Prepare request object
-        request = self.factory.get('/search?q=cmu')
+        request = self.factory.get('/autocomplete?term=cmu')
         request.user = self.user
         # Necessary as messages and session middleware are not instantiated in test environments
         setattr(request, 'session', 'session')
         setattr(request, '_messages', FallbackStorage(request))
-        
-        # Same as making a GET request to '/search')
-        response = search(request)
+
+        # Same as making a GET request to '/autocomplete')
+        response = autocomplete_search(request)
         decoded_response = str(response.content.decode('utf-8').rstrip().split('\n'))
-        
+
         # Ensure a response was returned
         self.assertEquals(decoded_response.find("No results found"), -1)
         # Ensure the right resource was returned by the model
-        self.assertNotEqual(decoded_response.find("http://www.cmu.edu"), -1)
+        self.assertNotEqual(decoded_response.find("Carnegie Mellon"), -1)
 
-    def test_search_no_result(self):
+    def test_autocomplete_existing_result_with_query_stopwords(self):
         # Prepare request object
-        request = self.factory.get('/search?q=random')
+        request = self.factory.get('/autocomplete?term=how%20to')
         request.user = self.user
         # Necessary as messages and session middleware are not instantiated in test environments
         setattr(request, 'session', 'session')
         setattr(request, '_messages', FallbackStorage(request))
-        
-        # Same as making a GET request to '/search')
-        response = search(request)
-        decoded_response = str(response.content.decode('utf-8').rstrip().split('\n'))
-        
-        # Ensure a response was NOT returned
-        self.assertNotEqual(decoded_response.find("No results found"), -1)
 
-    def test_search_category_valid(self):
-        # Prepare request object
-        # This time, we are setting the category parameter to category 1, which our sample resource belongs to
-        request = self.factory.get('/search?q=cmu&c=' + self.sample_category1.category_name)
-        request.user = self.user
-        # Necessary as messages and session middleware are not instantiated in test environments
-        setattr(request, 'session', 'session')
-        setattr(request, '_messages', FallbackStorage(request))
-        
-        # Same as making a GET request to '/search')
-        response = search(request)
+        # Same as making a GET request to '/autocomplete')
+        response = autocomplete_search(request)
         decoded_response = str(response.content.decode('utf-8').rstrip().split('\n'))
-        
+
         # Ensure a response was returned
         self.assertEquals(decoded_response.find("No results found"), -1)
         # Ensure the right resource was returned by the model
-        self.assertNotEqual(decoded_response.find("http://www.cmu.edu"), -1)
-    
-    def test_search_category_no_result(self):
+        self.assertNotEqual(decoded_response.find("How to Properly Restart a Router and Modem"), -1)
+
+    def test_autocomplete_no_result(self):
         # Prepare request object
-        # This time, we are setting the category parameter to category 2, which
-        # our sample resource DOES NOT belong to
-        request = self.factory.get('/search?q=cmu&c=' + self.sample_category2.category_name)
+        request = self.factory.get('/autocomplete?term=random')
         request.user = self.user
         # Necessary as messages and session middleware are not instantiated in test environments
         setattr(request, 'session', 'session')
         setattr(request, '_messages', FallbackStorage(request))
-        
-        # Same as making a GET request to '/search')
-        response = search(request)
-        decoded_response = str(response.content.decode('utf-8').rstrip().split('\n'))
-        
+
+        # Same as making a GET request to '/autocomplete')
+        response = autocomplete_search(request)
+        decoded_response = ''.join(filter(str.isalnum, str(response.content.decode('utf-8').rstrip().split('\n'))))
+
         # Ensure a response was NOT returned
-        self.assertNotEqual(decoded_response.find("No results found"), -1)
+        self.assertEqual(decoded_response, "")

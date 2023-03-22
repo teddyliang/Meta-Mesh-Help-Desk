@@ -15,7 +15,21 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/search.css' %}">
+
         <script src="{% static 'helpdesk_app/js/linkify.js' %}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/jquery-ui.css' %}">
+
+        <script>
+            $( function() {
+              $( "#tags" ).autocomplete({
+                source: '{% url "autocomplete" %}',
+                minlength: 1
+              });
+            } );
+        </script>
     </head>
     
     {% if results != None %}
@@ -34,12 +48,13 @@
                                     </option>
                                 {% endfor %}
                             </select>
-                            <input class="searchbar" type="text" title="Search" name="q" value="{{ query }}">
+                            <input id="tags" class="searchbar" type="text" title="Search" name="q" value="{{ query }}">
                         </div>
                         <div class="buttons">
                             <input class="button" type="submit" value="Search"></input>
                         </div>
                     </form>
+                    </div>
                 </div>
                 <ul>
                     {% if user.is_authenticated %}
@@ -70,6 +85,7 @@
             {% endif %}
         </div>
     {% else %}
+    <center>
         <header>
             <ul>
                 {% if user.is_authenticated %}
@@ -95,15 +111,15 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <input class="searchbar" type="text" title="Search" name="q">
+                    <input id="tags" class="searchbar" type="text" title="Search" name="q">
                 </div>
-                <br/>
                 <div class="buttons">
                     <input class="button" type="submit" value="Search"></input>
                 </div>
             </form>
-        </center>
+            </center>
         </div>
+    </center>
     {% endif %}
 </html>
 {% endblock pageContent%}
