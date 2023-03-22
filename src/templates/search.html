@@ -32,10 +32,12 @@
         <div class="logo">
             <img alt="Google" src="{% static 'helpdesk_app/img/logo.png' %}">
         </div>
-        {% if result != '' %}
+        {% if results|length > 0 %}
             <div class="search_result">
-                <h2>Result</h2>
-                {{ result }}
+                <h2>Results</h2>
+                {% for result in results %}
+                    {{ forloop.counter }}. {{ result }} <br/>
+                {% endfor %}
                 <br/>
                 <br/>
                 <a href="{% url 'home' %}">Try another search...</a>

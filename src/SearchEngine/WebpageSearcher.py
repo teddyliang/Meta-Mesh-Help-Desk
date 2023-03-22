@@ -25,7 +25,7 @@ nltk.download('wordnet')
 # Error message from browser when webscraping fails
 ERROR_MESSAGE = "Acceptable ! appropriate representation requested resource could found server . error generated Mod_Security ."
 # Determines how much the key words matter when searching links
-KEYWORD_WIEGHT = 2
+KEYWORD_WEIGHT = 2
 # Determines how many results should be returned
 SEARCH_LIST_LEN = 5
 
@@ -53,28 +53,22 @@ class WebpageSearcher:
         processed_query = preprocess_text(query)
 
         if (processed_query is None or processed_query == ''):
-            return ["no result"]
+            return []
 
         # Calculate the similarity between the processed query and each link
         similarities = {}
         for link in self.links:
             processed_link = link[0]
             keywords = link[2]
-            similarity = (calculate_similarity(processed_query, processed_link) + calculate_similarity(processed_query, keywords) * KEYWORD_WIEGHT)
+            similarity = (calculate_similarity(processed_query, processed_link) + calculate_similarity(processed_query, keywords) * KEYWORD_WEIGHT)
             if (similarity > 0):
                 similarities[link[1]] = similarity
-
-        if len(similarities) == 0:
-            return ["no result"]
 
         # Find the link with the highest similarity
         sorted_links = sorted(similarities, key=similarities.get, reverse=True)
 
         # Return the most similar link
-        if len(sorted_links) > SEARCH_LIST_LEN:
-            return sorted_links[:SEARCH_LIST_LEN]
-        else:
-            return sorted_links
+        return sorted_links[:min(len(sorted_links), SEARCH_LIST_LEN)]
 
 
 def preprocess_text(text):

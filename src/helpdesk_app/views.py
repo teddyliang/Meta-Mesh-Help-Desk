@@ -22,21 +22,23 @@ searcher = WebpageSearcher()
 searcher.add_link("https://techboomers.com/", "computers, software")
 searcher.add_link("https://seniornet.org/", "computers, software, easy, senior")
 searcher.add_link("https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-or-trying-to-scam-you/", "bank, money")
+searcher.add_link("https://www.scamadviser.com/", "scam, websites")
+searcher.add_link("https://www.kaspersky.com/resource-center/preemptive-safety/scam-websites", "avoid, scam, websites")
 ##############################
 
 
 def search(request):
     # TODO: This should be made async
     query = request.GET.get('q', '')
-    result = ""
+    results = []
     if query != '':
-        url = searcher.search(query)[0]  # Only displaying the first result for now
-        if url is None or url == "no result":
-            result = "No matches found"
+        urls = searcher.search(query)
+        if len(urls) == 0:
+            results = ["No matches found"]
         else:
-            result = "Closest match: " + url
+            results = urls
     return render(request, 'search.html', {
-        "result": result,
+        "results": results,
     })
 
 
