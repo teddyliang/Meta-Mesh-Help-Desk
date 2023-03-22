@@ -19,9 +19,9 @@ logger.info("core.views logger")
 ##############################
 # Search model
 searcher = WebpageSearcher()
-searcher.add_link("https://techboomers.com/")
-searcher.add_link("https://seniornet.org/")
-searcher.add_link("https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-or-trying-to-scam-you/")
+searcher.add_link("https://techboomers.com/", "computers, software")
+searcher.add_link("https://seniornet.org/", "computers, software, easy, senior")
+searcher.add_link("https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-or-trying-to-scam-you/", "bank, money")
 ##############################
 
 
@@ -30,7 +30,7 @@ def search(request):
     query = request.GET.get('q', '')
     result = ""
     if query != '':
-        url = searcher.search(query)
+        url = searcher.search(query)[0]  # Only displaying the first result for now
         if url is None or url == "no result":
             result = "No matches found"
         else:

@@ -6,11 +6,11 @@ def main():
     searcher = WebpageSearcher()
 
     # Add some links to the database
-    searcher.add_link("https://techboomers.com/")
-    searcher.add_link("https://seniornet.org/")
-    searcher.add_link("https://www.bbcgoodfood.com/recipes/easy-vanilla-cake")
-    searcher.add_link("https://www.delish.com/cooking/recipe-ideas/a27081036/easy-homemade-vanilla-cake-recipe/")
-
+    assert searcher.add_link("https://techboomers.com/", keywords="computers, tech, old people")
+    assert not searcher.add_link("https://seniornet.org/", keywords="computers")
+    assert not searcher.add_link("https://skjfnljeqbf", keywords="")
+    assert searcher.add_link("https://www.bbcgoodfood.com/recipes/easy-vanilla-cake", keywords="baking")
+    assert searcher.add_link("https://www.espn.com/", keywords="soccer")
     # Get input from the user
     while True:
         query = input("Please enter a query (or 'q' to quit): ")
