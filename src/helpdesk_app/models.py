@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
+from taggit.managers import TaggableManager
 
 
 # Profile for user model (helpdesk staff)
@@ -26,17 +27,8 @@ class AnswerResource(models.Model):
     blurb = models.CharField(max_length=2500, blank=True, default='')
     # Last updated
     updated = models.DateTimeField(auto_now=True)
-
-
-# Model to represen a keyword (resources can have many keywords)
-class Keyword(models.Model):
-    # The resource this keyword belongs to
-    # If the resource gets deleted, all keywords will be deleted as well (CASCADE)
-    resource = models.ForeignKey(AnswerResource, on_delete=models.CASCADE, blank=True, null=True)
-    # Short word or phrase to describe the keyword
-    name = models.CharField(max_length=100, blank=False, null=False)
-    # Last updated
-    updated = models.DateTimeField(auto_now=True)
+    # Tagging
+    tags = TaggableManager(help_text='Related keywords for this resource', blank=True)
 
 
 @receiver(post_save, sender=User)

@@ -193,4 +193,4 @@ def view_resources(request):
     paginator = Paginator(records, settings.PAGINATOR_COUNT + 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, "resources.html", {"page_obj": page_obj, 'myFilter': myFilter, 'user': request.user})
+    return render(request, "resources.html", {"page_obj": page_obj, "myFilter": myFilter, "user": request.user})
