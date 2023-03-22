@@ -13,7 +13,16 @@
             {% include 'messages.html' %}
             <form method="POST" id="form" style="width: 0%;"> {% csrf_token %}
                 <div class="align-fields-general">
-                    <h4 class="pad-me"><b>New resource</b></h4>
+                    {% if request.resolver_match.url_name == "update_resource" %}
+                        <h4 class="pad-me"><b>Update resource</b></h4>
+                        <div class="button-holder custom-margins">
+                            <a href="{% url 'delete_resource' id=request.resolver_match.kwargs.id %}" onclick="return confirm('Are you sure you would like to delete this resource?')"><p class="btn px-2 m-3 danger">Delete</p></a>
+                        </div>
+                        <br/>
+                        <div class="tools"></div>
+                    {% else %}
+                        <h4 class="pad-me"><b>New resource</b></h4>
+                    {% endif %}
                     {% for field in form %}
                     <p>
                         <div class="align-labels">
@@ -40,7 +49,7 @@
                 <div class="align-fields button-holder custom-margins"></div>
                     <br/>
                     <br/>
-                    <button class="btn wide-btn btn-primary" type="submit" form="form">Create</button>
+                    <button class="btn wide-btn btn-primary" type="submit" form="form">Save</button>
                 </div>
             </form>
         </div>

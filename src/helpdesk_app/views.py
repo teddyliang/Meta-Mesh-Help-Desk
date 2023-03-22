@@ -1,3 +1,7 @@
+# Time
+import datetime
+from django.utils import timezone
+# Django
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from django.shortcuts import render, redirect
 from .forms import ProfileForm, SignUpForm, ResourceForm
@@ -172,15 +176,62 @@ def new_resource(request):
             messages.success(request, 'Resource created successfully')
             return redirect('/resources')
         else:
-            return render(request, "new_resource.html", {
+            return render(request, "resource_form.html", {
                 "form": form
             })
     else:
         # Render new form
         form = ResourceForm()
-        return render(request, "new_resource.html", {
+        return render(request, "resource_form.html", {
             "form": form
         })
+
+
+@login_required
+def update_resource(request, id):
+    record = None
+    try:
+        record = AnswerResource.objects.get(id=id)
+    except:
+        messages.error(request, 'This resource does not exist.')
+        return redirect('/resources')
+
+    if request.method == "POST":
+        resource_form = ResourceForm(request.POST, instance=record)
+        if resource_form.is_valid():
+            record = resource_form.save()
+            record.updated = datetime.datetime.now(tz=timezone.utc)
+            record.save()
+            messages.success(request, 'Resource updated successfully.')
+            return redirect('/resources')
+        else:
+            return render(request, "resource_form.html", {
+                "form": resource_form
+            })
+    else:
+        resource_form = ResourceForm(instance=record)
+
+        return render(request, 'resource_form.html', {
+            'form': resource_form,
+        })
+
+
+@login_required
+def delete_resource(request, id):
+    record = None
+    try:
+        record = AnswerResource.objects.get(id=id)
+    except:
+        messages.error(request, 'Invalid resource.')
+        return redirect('/resources')
+
+    try:
+        record.delete()
+        messages.success(request, 'Resource deleted successfully.')
+        return redirect('/resources')
+    except Exception as e:
+        messages.error(request, 'Deletion failed, see error: ' + str(e))
+    return redirect('/resources')
 
 
 @login_required

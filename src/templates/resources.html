@@ -74,7 +74,7 @@
                                     <dd class="blurb">{{ r.blurb }}</dd>
                                     <dd class="keywords">{{ r.tags.all|join:", " }}</dd>
                                     <dd class="last-updated">{{ r.updated }}</dd>
-                                    <li><a href="{% url 'home' %}"><i class="material-icons md-48">edit</i></a></li>
+                                    <li><a href="{% url 'update_resource' id=r.id %}"><i class="material-icons md-48">edit</i></a></li>
                                 </dl>
                             </li>
                         {% endfor %}
