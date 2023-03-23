@@ -24,9 +24,9 @@ logger.info("core.views logger")
 ##############################
 # Search model
 searcher = WebpageSearcher()
-searcher.add_link("https://techboomers.com/", "computers, software")
-searcher.add_link("https://seniornet.org/", "computers, software, easy, senior")
-searcher.add_link("https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-or-trying-to-scam-you/", "bank, money")
+# searcher.add_link("https://techboomers.com/", "computers, software")
+# searcher.add_link("https://seniornet.org/", "computers, software, easy, senior")
+# searcher.add_link("https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-or-trying-to-scam-you/", "bank, money")
 ##############################
 
 
@@ -35,11 +35,12 @@ def search(request):
     query = request.GET.get('q', '')
     result = ""
     if query != '':
-        url = searcher.search(query)[0]  # Only displaying the first result for now
-        if url is None or url == "no result":
+        resource = searcher.search(query)  # Only displaying the first result for now
+        print(resource)
+        if resource is None or resource == "no result":
             result = "No matches found"
         else:
-            result = "Closest match: " + url
+            result = "Closest match: " + resource[0].url
     return render(request, 'search.html', {
         "result": result,
     })
@@ -174,6 +175,7 @@ def new_resource(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Resource created successfully')
+            searcher.update_search_engine()
             return redirect('/resources')
         else:
             return render(request, "resource_form.html", {
@@ -189,6 +191,7 @@ def new_resource(request):
 
 @login_required
 def update_resource(request, id):
+    print("HELLO THERE ARE   ")
     record = None
     try:
         record = AnswerResource.objects.get(id=id)
@@ -203,6 +206,7 @@ def update_resource(request, id):
             record.updated = datetime.datetime.now(tz=timezone.utc)
             record.save()
             messages.success(request, 'Resource updated successfully.')
+            searcher.update_search_engine()
             return redirect('/resources')
         else:
             return render(request, "resource_form.html", {
@@ -210,7 +214,6 @@ def update_resource(request, id):
             })
     else:
         resource_form = ResourceForm(instance=record)
-
         return render(request, 'resource_form.html', {
             'form': resource_form,
         })
@@ -228,6 +231,7 @@ def delete_resource(request, id):
     try:
         record.delete()
         messages.success(request, 'Resource deleted successfully.')
+        searcher.update_search_engine()
         return redirect('/resources')
     except Exception as e:
         messages.error(request, 'Deletion failed, see error: ' + str(e))

@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from helpdesk_app.models import AnswerResource
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -28,25 +29,35 @@ ERROR_MESSAGE = "Acceptable ! appropriate representation requested resource coul
 KEYWORD_WIEGHT = 2
 # Determines how many results should be returned
 SEARCH_LIST_LEN = 5
+#Ther are two methods of finding search results, use the tags matching built-in functionality or cosine similarity developed 
+# in this class, this variable determines which method to use. (In development for now)
+USE_TAGS = False
 
 
 class WebpageSearcher:
     def __init__(self):
-        self.links = []
+        self.links = AnswerResource.objects.all()
 
-    def add_link(self, link, keywords=""):
+        for link in self.links:
+            try:
+                link.content = preprocess_webpage(link.url)
+                print("content:")
+                print(link.content)
+                link.save()
+            except:
+                print("did not find content for %s" % link.url)
+
+    def update_search_engine(self):
         # webscrape the link
-        try:
-            processed_link = preprocess_webpage(link)
-        except:
-            return False
+        self.links = AnswerResource.objects.all()
 
-        self.links.append([processed_link, link, preprocess_text(keywords)])
-        # Check for Errors
-        if (processed_link is None or processed_link == ERROR_MESSAGE or processed_link == ''):
-            return False
-
-        return True
+        for link in self.links:
+            try:
+                link.content = preprocess_webpage(link.url)
+                link.save()
+            except:
+                print("did not find content for %s" % link.url)
+        
 
     def search(self, query):
         # Use natural language processing to process the query
@@ -54,21 +65,35 @@ class WebpageSearcher:
 
         if (processed_query is None or processed_query == ''):
             return ["no result"]
+        
+        # Use the tags similarity method to find the best match
+        if USE_TAGS:
+            # seems like I have to create an object to be able to compare it to other objects with similar tags
+            comparable = AnswerResource()
+            comparable.tags = processed_query
+            comparable.url = "https://amazon.com/"
+            comparable.save()
 
+            sorted_links = comparable.tags.similar_objects()
+            if len(sorted_links) == 0:
+                return "no result"
+            
+        else: 
         # Calculate the similarity between the processed query and each link
-        similarities = {}
-        for link in self.links:
-            processed_link = link[0]
-            keywords = link[2]
-            similarity = (calculate_similarity(processed_query, processed_link) + calculate_similarity(processed_query, keywords) * KEYWORD_WIEGHT)
-            if (similarity > 0):
-                similarities[link[1]] = similarity
+            similarities = {}
+            for link in self.links:
+                processed_link = link.content
+                print(processed_link)
+                keywords = " ".join(link.tags.names())
+                similarity = (calculate_similarity(processed_query, processed_link) + calculate_similarity(processed_query, keywords) * KEYWORD_WIEGHT)
+                if (similarity > 0):
+                    similarities[link] = similarity
 
-        if len(similarities) == 0:
-            return ["no result"]
+            if len(similarities) == 0:
+                return "no result"
 
-        # Find the link with the highest similarity
-        sorted_links = sorted(similarities, key=similarities.get, reverse=True)
+            # Find the link with the highest similarity
+            sorted_links = sorted(similarities, key=similarities.get, reverse=True)
 
         # Return the most similar link
         if len(sorted_links) > SEARCH_LIST_LEN:
@@ -96,16 +121,23 @@ def preprocess_text(text):
 
 def preprocess_webpage(url):
     # Scrape the webpage
+    print("here1")
     page = requests.get(url)
+    print("here2")
     soup = BeautifulSoup(page.content, 'html.parser')
+    print("here3")
 
     # Extract the visible text from the webpage
     texts = soup.findAll(text=True)
+    print("here4")
     visible_texts = filter(tag_visible, texts)
+    print("here5")
     webpage_text = u" ".join(t.strip() for t in visible_texts)
+    print("here6")
 
     # Preprocess the webpage text
     preprocessed_webpage = preprocess_text(webpage_text)
+    print("here7")
 
     return preprocessed_webpage
 
