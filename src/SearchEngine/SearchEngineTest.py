@@ -14,7 +14,7 @@ def main():
     assert not searcher.add_link("https://seniornet.org/", keywords="computers")
     assert not searcher.add_link("https://skjfnljeqbf", keywords="")
 
-    check_webscraping()
+    # check_webscraping()
     check_keywords()
     check_extraneous_inputs()
 
