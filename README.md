@@ -20,8 +20,9 @@ Prerequisites:
 Instructions to install:
 - `$ git clone {ssh key}`
 - `cd` into the cloned folder
-- `$ pip install -r requirements.txt`
-- `$ pip install django`
+- `$ pip install pipenv` (if not already installed)
+- `$ pipenv install`
+- `$ pipenv shell`
 - `$ python3 manage.py makemigrations`
 - `$ python3 manage.py migrate`
 - `$ python3 manage.py runserver`
