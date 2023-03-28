@@ -18,6 +18,7 @@ import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from helpdesk_app.models import AnswerResource
+from django.db.utils import OperationalError
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -29,23 +30,30 @@ ERROR_MESSAGE = "Acceptable ! appropriate representation requested resource coul
 KEYWORD_WIEGHT = 2
 # Determines how many results should be returned
 SEARCH_LIST_LEN = 5
-#Ther are two methods of finding search results, use the tags matching built-in functionality or cosine similarity developed 
+# There are two methods of finding search results, use the tags matching built-in functionality or cosine similarity developed
 # in this class, this variable determines which method to use. (In development for now)
 USE_TAGS = False
 
 
 class WebpageSearcher:
     def __init__(self):
-        self.links = AnswerResource.objects.all()
+        try:
+            self.links = AnswerResource.objects.all()
 
-        for link in self.links:
-            try:
-                link.content = preprocess_webpage(link.url)
-                print("content:")
-                print(link.content)
-                link.save()
-            except:
-                print("did not find content for %s" % link.url)
+            for link in self.links:
+                try:
+                    link.content = preprocess_webpage(link.url)
+                    print("content:")
+                    print(link.content)
+                    link.save()
+                except:
+                    print("did not find content for %s" % link.url)
+        except OperationalError:
+            ''' When first initializing views.py, it's possible that the database doesn't exist yet.
+            In these cases, Django will throw an OperationalError when trying to init the WebpageSearcher as
+            the call to AnswerResource will be invalid. In these cases, it's fine to pass.
+            '''
+            pass
 
     def update_search_engine(self):
         # webscrape the link
@@ -57,7 +65,6 @@ class WebpageSearcher:
                 link.save()
             except:
                 print("did not find content for %s" % link.url)
-        
 
     def search(self, query):
         # Use natural language processing to process the query
@@ -65,7 +72,7 @@ class WebpageSearcher:
 
         if (processed_query is None or processed_query == ''):
             return ["no result"]
-        
+
         # Use the tags similarity method to find the best match
         if USE_TAGS:
             # seems like I have to create an object to be able to compare it to other objects with similar tags
@@ -77,9 +84,9 @@ class WebpageSearcher:
             sorted_links = comparable.tags.similar_objects()
             if len(sorted_links) == 0:
                 return "no result"
-            
-        else: 
-        # Calculate the similarity between the processed query and each link
+
+        else:
+            # Calculate the similarity between the processed query and each link
             similarities = {}
             for link in self.links:
                 processed_link = link.content
