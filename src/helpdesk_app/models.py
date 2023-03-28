@@ -29,6 +29,8 @@ class AnswerResource(models.Model):
     updated = models.DateTimeField(auto_now=True)
     # Tagging
     tags = TaggableManager(help_text='Related keywords for this resource', blank=True)
+    # websraping content
+    content = models.TextField(blank=True, default='')
 
 
 @receiver(post_save, sender=User)
