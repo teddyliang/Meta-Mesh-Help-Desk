@@ -43,11 +43,10 @@ class WebpageSearcher:
             for link in self.links:
                 try:
                     link.content = preprocess_webpage(link.url)
-                    print("content:")
-                    print(link.content)
                     link.save()
                 except:
-                    print("did not find content for %s" % link.url)
+                    '''could not webscrape the link'''
+                    pass
         except OperationalError:
             ''' When first initializing views.py, it's possible that the database doesn't exist yet.
             In these cases, Django will throw an OperationalError when trying to init the WebpageSearcher as
@@ -64,7 +63,8 @@ class WebpageSearcher:
                 link.content = preprocess_webpage(link.url)
                 link.save()
             except:
-                print("did not find content for %s" % link.url)
+                '''could not webscrape the link'''
+                pass
 
     def search(self, query):
         # Use natural language processing to process the query
@@ -90,7 +90,6 @@ class WebpageSearcher:
             similarities = {}
             for link in self.links:
                 processed_link = link.content
-                print(processed_link)
                 keywords = " ".join(link.tags.names())
                 similarity = (calculate_similarity(processed_query, processed_link) + calculate_similarity(processed_query, keywords) * KEYWORD_WIEGHT)
                 if (similarity > 0):
@@ -128,23 +127,16 @@ def preprocess_text(text):
 
 def preprocess_webpage(url):
     # Scrape the webpage
-    print("here1")
     page = requests.get(url)
-    print("here2")
     soup = BeautifulSoup(page.content, 'html.parser')
-    print("here3")
 
     # Extract the visible text from the webpage
     texts = soup.findAll(text=True)
-    print("here4")
     visible_texts = filter(tag_visible, texts)
-    print("here5")
     webpage_text = u" ".join(t.strip() for t in visible_texts)
-    print("here6")
 
     # Preprocess the webpage text
     preprocessed_webpage = preprocess_text(webpage_text)
-    print("here7")
 
     return preprocessed_webpage
 
