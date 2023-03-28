@@ -1,14 +1,27 @@
-name: Run helpdesk tests
+name: Run helpdesk CI
 on: [pull_request, push]
 jobs:
   test_project:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v4
-      - run: pip install flake8==4.0.0
-      - run: pip install -r src/requirements.txt # Install all project dependencies
-      - run: cd src && python manage.py test # Run Django tests
-      - run: cd src && flake8 helpdesk_app # Run flake8 linter
-      - run: cd src && flake8 helpdesk_proj # Run flake8 linter
-      - run: cd src && flake8 SearchEngine # Run flake8 linter
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Install project dependencies
+        run: |
+          cd src
+          pip install flake8==4.0.0
+          pip install pipenv
+          pipenv install
+      - name: Run tests
+        run: |
+          cd src
+          pipenv run python manage.py test
+      - name: Run linters
+        run: |
+          cd src
+          flake8 helpdesk_app # Run flake8 linter
+          flake8 helpdesk_proj # Run flake8 linter
+          flake8 SearchEngine # Run flake8 linter
