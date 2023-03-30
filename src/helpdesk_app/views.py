@@ -36,7 +36,7 @@ def search(request):
     results = None
     if query != '':
         results = searcher.search(query)
-    
+
     return render(request, 'search.html', {
         "query": query,
         "results": results
