@@ -42,16 +42,40 @@ li a:hover {
     font-weight:bold;
 }
 
-.logo{
-    margin-top:200px;
-    margin-bottom:20px;
+.small-logo {
+    max-height: 90px;
 }
 
-.bar{
+.space-between {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inline {
+    display: flex;
+    align-items: center;
+}
+
+.centered {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+.bar {
+    display: flex;
     margin:0 auto;
     width:575px;
+    height: 45px;
     border-radius:30px;
     border:1px solid #3950A2;
+    justify-content: center;
+    align-items: center;
 }
 
 .bar:hover{
@@ -64,9 +88,9 @@ li a:hover {
 }
 
 .searchbar{
-    height:45px;
+    height:80%;
     border:none;
-    width:500px;
+    width:90%;
     font-size:16px;
     outline: none;
     background-color: #181818;
@@ -78,10 +102,6 @@ li a:hover {
     position:relative;
     top:5px;
     left:10px;
-}
-
-.buttons{
-    margin-top:30px;
 }
 
 .button{
@@ -116,4 +136,39 @@ li a:hover {
 
 .search_result a {
     color: #3950A2;
+}
+
+/* Search result styles */
+
+.results-area {
+    position: relative;
+    width: 90%;
+    left: 5%;
+}
+
+.result {
+    margin-left: 8px;
+}
+
+.result h2 {
+    font-size: 19px;
+    line-height: 18px;
+    font-weight: normal;
+    color: rgb(216, 216, 216);
+    margin-bottom: 0px;
+    margin-top: 25px;
+}
+
+.result a {
+    font-size: 14px;
+    line-height: 14px;
+    color: #3498db;
+    margin-bottom: 0px;
+}
+
+.result p {
+    width: 625px;
+    font-size: 13px;
+    margin-top: 0px;
+    color: #bdc3c7;
 }
