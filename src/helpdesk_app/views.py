@@ -34,7 +34,6 @@ def search(request):
     if query != '':
         results = searcher.search(query)
     
-    print("Results:", results)
     return render(request, 'search.html', {
         "query": query,
         "results": results
