@@ -24,9 +24,6 @@ logger.info("core.views logger")
 ##############################
 # Search model
 searcher = WebpageSearcher()
-# searcher.add_link("https://techboomers.com/", "computers, software")
-# searcher.add_link("https://seniornet.org/", "computers, software, easy, senior")
-# searcher.add_link("https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-or-trying-to-scam-you/", "bank, money")
 ##############################
 def autocomplete_search(request):
     query = request.GET.get('q', '')
@@ -36,16 +33,14 @@ def autocomplete_search(request):
 def search(request):
     # TODO: This should be made async
     query = request.GET.get('q', '')
-    result = ""
+    results = None
     if query != '':
-        resource = searcher.search(query)  # Only displaying the first result for now
-        print(resource)
-        if resource is None or resource == "no result":
-            result = "No matches found"
-        else:
-            result = "Closest match: " + resource[0].url
+        results = searcher.search(query)
+    
+    print("Results:", results)
     return render(request, 'search.html', {
-        "result": result,
+        "query": query,
+        "results": results
     })
 
 

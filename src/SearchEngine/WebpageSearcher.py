@@ -71,7 +71,7 @@ class WebpageSearcher:
         processed_query = preprocess_text(query)
 
         if (processed_query is None or processed_query == ''):
-            return ["no result"]
+            return []
 
         # Use the tags similarity method to find the best match
         if USE_TAGS:
@@ -83,7 +83,7 @@ class WebpageSearcher:
 
             sorted_links = comparable.tags.similar_objects()
             if len(sorted_links) == 0:
-                return "no result"
+                return []
 
         else:
             # Calculate the similarity between the processed query and each link
@@ -96,16 +96,13 @@ class WebpageSearcher:
                     similarities[link] = similarity
 
             if len(similarities) == 0:
-                return "no result"
+                return []
 
             # Find the link with the highest similarity
             sorted_links = sorted(similarities, key=similarities.get, reverse=True)
 
         # Return the most similar link
-        if len(sorted_links) > SEARCH_LIST_LEN:
-            return sorted_links[:SEARCH_LIST_LEN]
-        else:
-            return sorted_links
+        return sorted_links[:min(SEARCH_LIST_LEN, len(sorted_links))]
 
 
 def preprocess_text(text):
