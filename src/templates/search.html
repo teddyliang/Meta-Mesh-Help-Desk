@@ -16,8 +16,28 @@
         <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/search.css' %}">
         <script src="{% static 'helpdesk_app/js/linkify.js' %}"></script>
+        <script src=  
+        "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">  
+            </script>  
+            
+            <script src=  
+        "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">  
+            </script>  
+            
+            <link href=  
+        "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+                rel="stylesheet" type="text/css" />
     </head>
-
+    $(function() {
+        $('#myinput').autocomplete({
+          source: '/autocomplete/',
+          minLength: 2,
+          select: function(event, ui) {
+            $('#myinput').val(ui.item.text);
+            return false;
+          }
+        });
+      });
     <center>
         <header>
             <ul>

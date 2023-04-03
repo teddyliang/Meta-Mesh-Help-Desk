@@ -28,7 +28,10 @@ searcher = WebpageSearcher()
 # searcher.add_link("https://seniornet.org/", "computers, software, easy, senior")
 # searcher.add_link("https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-or-trying-to-scam-you/", "bank, money")
 ##############################
-
+def autocomplete_search(request):
+    query = request.GET.get('q', '')
+    autocomplete_result = AnswerResource.objects.filter(name__icontains=query)
+    return render(request, 'search.html', {"autocomplete_result" : autocomplete_result})
 
 def search(request):
     # TODO: This should be made async
@@ -44,6 +47,7 @@ def search(request):
     return render(request, 'search.html', {
         "result": result,
     })
+
 
 
 @login_required
