@@ -46,7 +46,7 @@ class ResourceTests(TestCase):
         decoded_response = str(response.content.decode('utf-8').rstrip().split('\n'))
         
         # Ensure a response was returned
-        self.assertEquals(decoded_response.find("No matches found"), -1)
+        self.assertEquals(decoded_response.find("No results found"), -1)
         # Ensure the right resource was returned by the model
         self.assertNotEqual(decoded_response.find("http://www.cmu.edu"), -1)
 
@@ -63,4 +63,4 @@ class ResourceTests(TestCase):
         decoded_response = str(response.content.decode('utf-8').rstrip().split('\n'))
         
         # Ensure a response was NOT returned
-        self.assertNotEqual(decoded_response.find("No matches found"), -1)
+        self.assertNotEqual(decoded_response.find("No results found"), -1)
