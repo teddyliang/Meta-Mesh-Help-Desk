@@ -33,10 +33,12 @@ def search(request):
     results = None
     if query != '':
         results = searcher.search(query)
-
+    categories = Category.objects.all()
+    
     return render(request, 'search.html', {
         "query": query,
-        "results": results
+        "results": results,
+        "categories": categories
     })
 
 
