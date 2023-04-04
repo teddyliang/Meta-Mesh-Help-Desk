@@ -33,4 +33,5 @@ urlpatterns = [
     path('update_resource/<int:id>', views.update_resource, name="update_resource"),
     path('delete_resource/<int:id>', views.delete_resource, name="delete_resource"),
     path('resources/', views.view_resources, name="resources"),
+    path('new_category/', views.new_category, name="new_category"),
 ]

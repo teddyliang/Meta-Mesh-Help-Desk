@@ -4,7 +4,7 @@ from django.utils import timezone
 # Django
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from django.shortcuts import render, redirect
-from .forms import ProfileForm, SignUpForm, ResourceForm
+from .forms import ProfileForm, SignUpForm, ResourceForm, CategoryForm
 from .models import AnswerResource
 from django.conf import settings
 # Flash messages
@@ -247,3 +247,24 @@ def view_resources(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "resources.html", {"page_obj": page_obj, "myFilter": myFilter, "user": request.user})
+
+
+@login_required
+def new_category(request):
+    if request.method == "POST":
+        # Create
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category created successfully')
+            return redirect('/home')  # TODO
+        else:
+            return render(request, "category_form.html", {
+                "form": form
+            })
+    else:
+        # Render new form
+        form = CategoryForm()
+        return render(request, "category_form.html", {
+            "form": form
+        })
