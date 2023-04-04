@@ -100,8 +100,18 @@
             </div>
             <form action="{% url 'home' %}" method="get">
                 <div class="bar">
+                    {% if categories.count > 0 %}
+                        <select class="search_category" name="c">
+                            <option value="none">Category search</option>
+                            {% for category in categories %}
+                                {{ category }}
+                                <option value="{{ category.category_name }}">{{ category }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
                     <input class="searchbar" type="text" title="Search" name="q">
                 </div>
+                <br/>
                 <div class="buttons">
                     <input class="button" type="submit" value="Search"></input>
                 </div>
