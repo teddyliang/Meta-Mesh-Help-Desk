@@ -33,11 +33,17 @@ def autocomplete_search(request):
 def search(request):
     # TODO: This should be made async
     query = request.GET.get('q', '')
+    category = request.GET.get('c', '')
     results = None
+    category_object = None
+    if category != '':
+        # Safely handles invalid input -- even if the user manually changes the "?c=" field
+        # to a category that doesn't exist, it will not filter on any category and return all matches
+        category_object = Category.objects.all().filter(category_name=category).first()
     if query != '':
-        results = searcher.search(query)
+        results = searcher.search(query, category_object)
     categories = Category.objects.all()
-    
+
     return render(request, 'search.html', {
         "query": query,
         "results": results,
