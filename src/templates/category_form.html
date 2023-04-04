@@ -16,8 +16,7 @@
                     {% if request.resolver_match.url_name == "update_category" %}
                         <h4 class="pad-me"><b>Update category</b></h4>
                         <div class="button-holder custom-margins">
-                            <!-- TODO -->
-                            <a href="{% url 'home' %}" onclick="return confirm('Are you sure you would like to delete this category?')"><p class="btn px-2 m-3 danger">Delete</p></a>
+                            <a href="{% url 'delete_category' id=request.resolver_match.kwargs.id %}" onclick="return confirm('Are you sure you would like to delete this category?')"><p class="btn px-2 m-3 danger">Delete</p></a>
                         </div>
                         <br/>
                         <div class="tools"></div>
