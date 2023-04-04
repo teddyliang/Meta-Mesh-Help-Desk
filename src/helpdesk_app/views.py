@@ -267,6 +267,51 @@ def new_category(request):
 
 
 @login_required
+def update_category(request, id):
+    record = None
+    try:
+        record = Category.objects.get(id=id)
+    except:
+        messages.error(request, 'This category does not exist.')
+        return redirect('/categories')
+
+    if request.method == "POST":
+        category_form = CategoryForm(request.POST, instance=record)
+        if category_form.is_valid():
+            record = category_form.save()
+            record.save()
+            messages.success(request, 'Category updated successfully.')
+            return redirect('/categories')
+        else:
+            return render(request, "category_form.html", {
+                "form": category_form
+            })
+    else:
+        category_form = CategoryForm(instance=record)
+        return render(request, 'category_form.html', {
+            'form': category_form,
+        })
+
+
+@login_required
+def delete_category(request, id):
+    record = None
+    try:
+        record = Category.objects.get(id=id)
+    except:
+        messages.error(request, 'Invalid category.')
+        return redirect('/categories')
+
+    try:
+        record.delete()
+        messages.success(request, 'Category deleted successfully.')
+        return redirect('/categories')
+    except Exception as e:
+        messages.error(request, 'Deletion failed, see error: ' + str(e))
+    return redirect('/categories')
+
+
+@login_required
 def view_categories(request):
     records = Category.objects.all()
 

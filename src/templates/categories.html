@@ -66,8 +66,7 @@
                             <li class="data-item">
                                 <dl class="data-grid-5">
                                     <dd>{{ r.category_name }}</dd>
-                                    <!-- TODO -->
-                                    <li><a href="{% url 'home' %}"><i class="material-icons md-48">edit</i></a></li>
+                                    <li><a href="{% url 'update_category' id=r.id %}"><i class="material-icons md-48">edit</i></a></li>
                                 </dl>
                             </li>
                         {% endfor %}
