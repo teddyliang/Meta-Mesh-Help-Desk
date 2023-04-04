@@ -5,7 +5,7 @@ from django.utils import timezone
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from django.shortcuts import render, redirect
 from .forms import ProfileForm, SignUpForm, ResourceForm, CategoryForm
-from .models import AnswerResource
+from .models import AnswerResource, Category
 from django.conf import settings
 # Flash messages
 from django.contrib import messages
@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 # Paginator
 from django.core.paginator import Paginator
 # Filters
-from .filters import UserFilter, ResourceFilter
+from .filters import UserFilter, ResourceFilter, CategoryFilter
 # Logging
 import logging
 logger = logging.getLogger('ex_logger')
@@ -257,7 +257,7 @@ def new_category(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Category created successfully')
-            return redirect('/home')  # TODO
+            return redirect('/categories')
         else:
             return render(request, "category_form.html", {
                 "form": form
@@ -268,3 +268,16 @@ def new_category(request):
         return render(request, "category_form.html", {
             "form": form
         })
+
+
+@login_required
+def view_categories(request):
+    records = Category.objects.all()
+
+    myFilter = CategoryFilter(request.GET, queryset=records)
+    records = myFilter.qs
+
+    paginator = Paginator(records, settings.PAGINATOR_COUNT + 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "categories.html", {"page_obj": page_obj, "myFilter": myFilter, "user": request.user})
