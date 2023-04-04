@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+{% load template_tags %}
+{% block pageContent %}
+    <div class="col-sm custom-grid">
+        <div class="well">
+            <div class="top-header">
+                <div>
+                    <h4 class="history-title">Categories</h4>
+                </div>
+                <div class="home-right">
+                    <a href="{% url 'new_category' %}">
+                        <button class="btn btn-primary">Add new category</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tools">
+                <div class="left-menu">
+                    <div class="dropdown" style="margin-right:10px">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter & Sort
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <h4>Filter by:</h4>
+                            <form method="get">
+                                {{myFilter.form}}
+                                <button type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                        <a href="{% relative_url 1 'page' request.GET.urlencode %}"><i class="material-icons md-48">keyboard_double_arrow_left</i></a>
+                        <a href="{% relative_url page_obj.previous_page_number 'page' request.GET.urlencode %}"><i class="material-icons md-48">keyboard_arrow_left</i></a>
+                    {% else %}
+                        <i class="material-icons md-48">keyboard_double_arrow_left</i>
+                        <i class="material-icons md-48">keyboard_arrow_left</i>
+                    {% endif %}&nbsp;
+                    <p>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+                    {% if page_obj.has_next %}
+                        <a href="{% relative_url page_obj.next_page_number 'page' request.GET.urlencode %}"><i class="material-icons md-48">keyboard_arrow_right</i></a>
+                        <a href="{% relative_url page_obj.paginator.num_pages 'page' request.GET.urlencode %}"><i class="material-icons md-48">keyboard_double_arrow_right</i></a>
+                    {% else %}
+                        <i class="material-icons md-48">keyboard_arrow_right</i>
+                        <i class="material-icons md-48">keyboard_double_arrow_right</i>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% include 'messages.html' %}
+
+            {% if page_obj %}
+                <div>
+                    <ul class="data-frame">
+                        <li class="data-item frame-header">
+                            <dl class="data-grid-5">
+                                <dt class = "rowheader">Name</dt>
+                                <dd class = "rowheader">Edit</dd>
+                            </dl>
+                        </li>
+                        {% for r in page_obj %}
+                            <li class="data-item">
+                                <dl class="data-grid-5">
+                                    <dd>{{ r.category_name }}</dd>
+                                    <!-- TODO -->
+                                    <li><a href="{% url 'home' %}"><i class="material-icons md-48">edit</i></a></li>
+                                </dl>
+                            </li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <i>more records on next pages...</i>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% else %}
+                No matching records. Try loosening your filters?
+            {% endif %}
+        </div>
+
+    </div>
+    <script>
+        const btn = document.getElementById('id_o').nextElementSibling;
+        btn.insertAdjacentHTML('beforebegin','<br/><br/>');
+        document.getElementById('id_o').previousElementSibling.style.display = "none";
+        document.getElementById('id_o').previousElementSibling.insertAdjacentHTML('beforebegin','<br/><br/><h4>Order by:<br/>');
+        document.getElementById('id_updated').type = 'date';
+    </script>
+{% endblock %}
