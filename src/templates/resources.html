@@ -57,9 +57,10 @@
                 <div>
                     <ul class="data-frame">
                         <li class="data-item frame-header">
-                            <dl class="data-grid-6">
+                            <dl class="data-grid-7">
                                 <dt class = "rowheader">Title</dt>
                                 <dd class = "rowheader">URL</dd>
+                                <dd class = "rowheader">Category</dd>
                                 <dd class = "rowheader">Blurb</dd>
                                 <dd class = "rowheader">Keywords</dd>
                                 <dd class = "rowheader">Last Updated (UTC)</dd>
@@ -68,9 +69,10 @@
                         </li>
                         {% for r in page_obj %}
                             <li class="data-item">
-                                <dl class="data-grid-6">
+                                <dl class="data-grid-7">
                                     <dd>{{ r.title }}</dd>
                                     <dd class="url"><a href="{{ r.url }}" target="_blank">{{ r.url }}</a></dd>
+                                    <dd class="categories">{{ r|categories_display }}</dd>
                                     <dd class="blurb">{{ r.blurb }}</dd>
                                     <dd class="keywords">{{ r.tags.all|join:", " }}</dd>
                                     <dd class="last-updated">{{ r.updated }}</dd>

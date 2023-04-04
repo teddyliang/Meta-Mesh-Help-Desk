@@ -58,7 +58,7 @@ class ResourceFilter(django_filters.FilterSet):
     class Meta:
         ordering = ['-updated']
         model = AnswerResource
-        fields = ['updated']
+        fields = ['updated', 'categories']
 
     def __init__(self, *args, **kwargs):
         super(ResourceFilter, self).__init__(*args, **kwargs)
