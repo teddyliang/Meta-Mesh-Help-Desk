@@ -17,6 +17,14 @@ class Profile(models.Model):
     )
 
 
+# Model to represent categories
+class Category(models.Model):
+    category_name = models.CharField(max_length=50, blank=False, null=False, unique=True)
+
+    def __str__(self):
+        return self.category_name
+
+
 # Model to represent resources
 class AnswerResource(models.Model):
     # Short title to describe the resource (required)
@@ -29,8 +37,10 @@ class AnswerResource(models.Model):
     updated = models.DateTimeField(auto_now=True)
     # Tagging
     tags = TaggableManager(help_text='Related keywords for this resource', blank=True)
-    # websraping content
+    # Websraping content
     content = models.TextField(blank=True, default='')
+    # Categories
+    categories = models.ManyToManyField(Category)
 
 
 @receiver(post_save, sender=User)
