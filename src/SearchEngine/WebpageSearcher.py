@@ -66,7 +66,7 @@ class WebpageSearcher:
                 '''could not webscrape the link'''
                 pass
 
-    def search(self, query):
+    def search(self, query, category_object):
         # Use natural language processing to process the query
         processed_query = preprocess_text(query)
 
@@ -100,6 +100,10 @@ class WebpageSearcher:
 
             # Find the link with the highest similarity
             sorted_links = sorted(similarities, key=similarities.get, reverse=True)
+
+        # Filter by category, if applicable
+        if category_object is not None:
+            sorted_links = [resource for resource in sorted_links if category_object in list(resource.categories.all())]
 
         # Return the most similar link
         return sorted_links[:min(SEARCH_LIST_LEN, len(sorted_links))]

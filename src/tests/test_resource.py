@@ -1,6 +1,6 @@
 from helpdesk_app.forms import ResourceForm
 from helpdesk_app.views import delete_resource
-from helpdesk_app.models import AnswerResource
+from helpdesk_app.models import AnswerResource, Category
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
@@ -16,6 +16,10 @@ class ResourceTests(TestCase):
             title="Carnegie Mellon",
             url="http://www.cmu.edu",
             blurb="An exmaple resource that points to CMU."
+        )
+
+        self.sample_category = Category.objects.create(
+            category_name="Test"
         )
 
     def test_resource_created(self):
@@ -43,7 +47,8 @@ class ResourceTests(TestCase):
         form_data = {
             'title' : "Example Resource",
             'url' : "http://www.google.com", 
-            'blurb' : "Here is a short blurb about the example resource.", 
+            'blurb' : "Here is a short blurb about the example resource.",
+            'categories' : [str(self.sample_category.id)]
         }
         form = ResourceForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -53,7 +58,8 @@ class ResourceTests(TestCase):
             'title' : "Example Resource",
             # Invalid URL
             'url' : "this is not a valid url", 
-            'blurb' : "Here is a short blurb about the example resource.", 
+            'blurb' : "Here is a short blurb about the example resource.",
+            'categories' : [str(self.sample_category.id)]
         }
         form = ResourceForm(data=form_data)
         self.assertFalse(form.is_valid())
@@ -63,7 +69,8 @@ class ResourceTests(TestCase):
             # Title too long
             'title' : "Instead of a short title, I'm instead writing a very long description instead which should throw an error!",
             'url' : "http://www.google.com", 
-            'blurb' : "Here is a short blurb about the example resource.", 
+            'blurb' : "Here is a short blurb about the example resource.",
+            'categories' : [str(self.sample_category.id)]
         }
         form = ResourceForm(data=form_data)
         self.assertFalse(form.is_valid())
@@ -73,7 +80,8 @@ class ResourceTests(TestCase):
             # Missing parameters
             'title' : "",
             'url' : "http://www.google.com", 
-            'blurb' : "Here is a short blurb about the example resource.", 
+            'blurb' : "Here is a short blurb about the example resource.",
+            'categories' : [str(self.sample_category.id)]
         }
         form = ResourceForm(data=form_data)
         self.assertFalse(form.is_valid())
@@ -83,7 +91,19 @@ class ResourceTests(TestCase):
             'title' : "Some title here",
             # Duplicate URL with self.sample_resource
             'url' : "http://www.cmu.edu", 
-            'blurb' : "Here is a short blurb about the example resource.", 
+            'blurb' : "Here is a short blurb about the example resource.",
+            'categories' : [str(self.sample_category.id)]
+        }
+        form = ResourceForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_invalid_form5(self):
+        form_data = {
+            'title' : "Example Resource",
+            'url' : "http://www.google.com", 
+            'blurb' : "Here is a short blurb about the example resource.",
+            # Invalid category
+            'categories' : ['999']
         }
         form = ResourceForm(data=form_data)
         self.assertFalse(form.is_valid())

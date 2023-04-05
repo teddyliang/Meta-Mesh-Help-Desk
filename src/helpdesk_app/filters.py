@@ -1,6 +1,6 @@
 import django_filters
 from django_filters import DateFilter, OrderingFilter, CharFilter
-from .models import User, AnswerResource
+from .models import Category, User, AnswerResource
 
 
 class UserFilter(django_filters.FilterSet):
@@ -58,8 +58,14 @@ class ResourceFilter(django_filters.FilterSet):
     class Meta:
         ordering = ['-updated']
         model = AnswerResource
-        fields = ['updated']
+        fields = ['updated', 'categories']
 
     def __init__(self, *args, **kwargs):
         super(ResourceFilter, self).__init__(*args, **kwargs)
         self.filters['updated'].label = "Last updated date is on or after:"
+
+
+class CategoryFilter(django_filters.FilterSet):
+    class Meta:
+        model = Category
+        fields = ['category_name']
