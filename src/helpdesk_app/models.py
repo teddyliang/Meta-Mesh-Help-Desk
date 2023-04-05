@@ -33,6 +33,12 @@ class AnswerResource(models.Model):
     content = models.TextField(blank=True, default='')
 
 
+# Model to represennt frequent queries
+class Queries(models.Model):
+    raw_query = models.CharField(max_length=1000, null=False, default="")
+    processed_query = models.CharField(max_length=1000, null=False, default="")
+    occurrences = models.PositiveIntegerField()
+
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:

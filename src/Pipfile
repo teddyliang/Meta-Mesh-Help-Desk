@@ -50,6 +50,7 @@ weasyprint = "==47"
 webencodings = "==0.5.1"
 whitenoise = "==6.0.0"
 wrapt = "==1.11.1"
+bert-score = "*"
 
 [dev-packages]
 flake8 = "*"

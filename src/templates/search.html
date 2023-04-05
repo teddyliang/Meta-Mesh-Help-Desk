@@ -73,18 +73,18 @@
         </header>
         <div class="centered">
             <center>
-            <div class="logo">
-                <img alt="Google" src="{% static 'helpdesk_app/img/logo.png' %}">
-            </div>
-            <form action="{% url 'home' %}" method="get">
-                <div class="bar">
-                    <input class="searchbar" type="text" title="Search" name="q">
+                <div class="logo">
+                    <img alt="Google" src="{% static 'helpdesk_app/img/logo.png' %}">
                 </div>
-                <div class="buttons">
-                    <input class="button" type="submit" value="Search"></input>
-                </div>
-            </form>
-        </center>
+                <form action="{% url 'home' %}" method="get">
+                    <div class="bar">
+                        <input class="searchbar" type="text" title="Search" name="q">
+                    </div>
+                    <div class="buttons">
+                        <input class="button" type="submit" value="Search"></input>
+                    </div>
+                </form>
+            </center>
         </div>
     {% endif %}
 </html>

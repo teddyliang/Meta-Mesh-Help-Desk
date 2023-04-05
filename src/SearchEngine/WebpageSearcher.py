@@ -11,14 +11,16 @@
 
 
 import nltk
+import threading
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from bs4 import BeautifulSoup
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from helpdesk_app.models import AnswerResource
+from helpdesk_app.models import AnswerResource, Queries
 from django.db.utils import OperationalError
+from bert_score import BERTScorer
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -33,12 +35,16 @@ SEARCH_LIST_LEN = 5
 # There are two methods of finding search results, use the tags matching built-in functionality or cosine similarity developed
 # in this class, this variable determines which method to use. (In development for now)
 USE_TAGS = False
+# The similarity threshold for determining if two queries represent the same request
+QUERY_SIMILARITY_THRESHOLD = 0.75
 
 
 class WebpageSearcher:
     def __init__(self):
         try:
+            self.scorer = BERTScorer(lang="en", rescale_with_baseline=True)
             self.links = AnswerResource.objects.all()
+            self.queries = Queries.objects.all()
 
             for link in self.links:
                 try:
@@ -65,6 +71,9 @@ class WebpageSearcher:
             except:
                 '''could not webscrape the link'''
                 pass
+        
+        # fetch the frequently asked queries
+        self.queries = Queries.objects.all()
 
     def search(self, query):
         # Use natural language processing to process the query
@@ -101,9 +110,39 @@ class WebpageSearcher:
             # Find the link with the highest similarity
             sorted_links = sorted(similarities, key=similarities.get, reverse=True)
 
+        # If the query has results, update frequently asked queries. Spin up a thread so the user doesn't
+        # have to wait for these calculations to finish as they aren't important to their search result
+        if len(sorted_links) > 0:
+            t = threading.Thread(target=self.update_faq, args=[query, processed_query])
+            t.setDaemon(False)
+            t.start()
+
         # Return the most similar link
         return sorted_links[:min(SEARCH_LIST_LEN, len(sorted_links))]
 
+
+    def update_faq(self, query, processed_query):
+        # fetch the frequently asked queries
+        self.queries = Queries.objects.all()
+
+        most_similar_faq = None
+        highest_similarity = 0
+        for faq in self.queries:
+            _, _, similarity = self.scorer.score([processed_query], [faq.processed_query])
+            similarity = float(similarity)
+            if similarity > highest_similarity:
+                most_similar_faq = faq
+                highest_similarity = similarity
+
+        if highest_similarity >= QUERY_SIMILARITY_THRESHOLD:
+            most_similar_faq.occurrences += 1
+            most_similar_faq.save()
+        else:
+            new_query = Queries(raw_query=query, processed_query=processed_query, occurrences=1)
+            new_query.save()
+    
+    def get_faq(self, limit=5):
+        return Queries.objects.order_by('-occurrences')[:limit]
 
 def preprocess_text(text):
     # Tokenize the text into words
