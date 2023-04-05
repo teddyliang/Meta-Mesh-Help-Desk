@@ -4,8 +4,8 @@ from django.utils import timezone
 # Django
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from django.shortcuts import render, redirect
-from .forms import ProfileForm, SignUpForm, ResourceForm
-from .models import AnswerResource
+from .forms import ProfileForm, SignUpForm, ResourceForm, CategoryForm
+from .models import AnswerResource, Category
 from django.conf import settings
 # Flash messages
 from django.contrib import messages
@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 # Paginator
 from django.core.paginator import Paginator
 # Filters
-from .filters import UserFilter, ResourceFilter
+from .filters import UserFilter, ResourceFilter, CategoryFilter
 # Logging
 import logging
 logger = logging.getLogger('ex_logger')
@@ -30,13 +30,21 @@ searcher = WebpageSearcher()
 def search(request):
     # TODO: This should be made async
     query = request.GET.get('q', '')
+    category = request.GET.get('c', '')
     results = None
+    category_object = None
+    if category != '':
+        # Safely handles invalid input -- even if the user manually changes the "?c=" field
+        # to a category that doesn't exist, it will not filter on any category and return all matches
+        category_object = Category.objects.all().filter(category_name=category).first()
     if query != '':
-        results = searcher.search(query)
+        results = searcher.search(query, category_object)
+    categories = Category.objects.all()
 
     return render(request, 'search.html', {
         "query": query,
-        "results": results
+        "results": results,
+        "categories": categories
     })
 
 
@@ -243,3 +251,82 @@ def view_resources(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "resources.html", {"page_obj": page_obj, "myFilter": myFilter, "user": request.user})
+
+
+@login_required
+def new_category(request):
+    if request.method == "POST":
+        # Create
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category created successfully')
+            return redirect('/categories')
+        else:
+            return render(request, "category_form.html", {
+                "form": form
+            })
+    else:
+        # Render new form
+        form = CategoryForm()
+        return render(request, "category_form.html", {
+            "form": form
+        })
+
+
+@login_required
+def update_category(request, id):
+    record = None
+    try:
+        record = Category.objects.get(id=id)
+    except:
+        messages.error(request, 'This category does not exist.')
+        return redirect('/categories')
+
+    if request.method == "POST":
+        category_form = CategoryForm(request.POST, instance=record)
+        if category_form.is_valid():
+            record = category_form.save()
+            record.save()
+            messages.success(request, 'Category updated successfully.')
+            return redirect('/categories')
+        else:
+            return render(request, "category_form.html", {
+                "form": category_form
+            })
+    else:
+        category_form = CategoryForm(instance=record)
+        return render(request, 'category_form.html', {
+            'form': category_form,
+        })
+
+
+@login_required
+def delete_category(request, id):
+    record = None
+    try:
+        record = Category.objects.get(id=id)
+    except:
+        messages.error(request, 'Invalid category.')
+        return redirect('/categories')
+
+    try:
+        record.delete()
+        messages.success(request, 'Category deleted successfully.')
+        return redirect('/categories')
+    except Exception as e:
+        messages.error(request, 'Deletion failed, see error: ' + str(e))
+    return redirect('/categories')
+
+
+@login_required
+def view_categories(request):
+    records = Category.objects.all()
+
+    myFilter = CategoryFilter(request.GET, queryset=records)
+    records = myFilter.qs
+
+    paginator = Paginator(records, settings.PAGINATOR_COUNT + 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "categories.html", {"page_obj": page_obj, "myFilter": myFilter, "user": request.user})

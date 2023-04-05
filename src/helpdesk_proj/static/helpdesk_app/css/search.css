@@ -87,10 +87,23 @@ li a:hover {
     outline:none;
 }
 
+.search_category{
+    margin-left: 3%;
+    height: 100%;
+    width: 23%;
+    background: none;
+    color: #8b8b8b;
+    margin-right: 2%;
+    border-right: 1px solid #3950a2;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+}
+
 .searchbar{
     height:80%;
     border:none;
-    width:90%;
+    width:68%;
     font-size:16px;
     outline: none;
     background-color: #181818;

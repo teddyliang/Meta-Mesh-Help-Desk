@@ -75,7 +75,7 @@ class WebpageSearcher:
         # fetch the frequently asked queries
         self.queries = Queries.objects.all()
 
-    def search(self, query):
+    def search(self, query, category_object):
         # Use natural language processing to process the query
         processed_query = preprocess_text(query)
 
@@ -116,6 +116,10 @@ class WebpageSearcher:
             t = threading.Thread(target=self.update_faq, args=[query, processed_query])
             t.setDaemon(False)
             t.start()
+
+        # Filter by category, if applicable
+        if category_object is not None:
+            sorted_links = [resource for resource in sorted_links if category_object in list(resource.categories.all())]
 
         # Return the most similar link
         return sorted_links[:min(SEARCH_LIST_LEN, len(sorted_links))]

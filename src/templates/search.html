@@ -25,6 +25,15 @@
                     <a href="{% url 'home' %}"><img class="small-logo" alt="Community Internet Solutions logo" src="{% static 'helpdesk_app/img/logo.png' %}"></a>
                     <form class="inline" action="{% url 'home' %}" method="get">
                         <div class="bar">
+                            <select class="search_category" name="c">
+                                <option value="">Category search</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.category_name }}"
+                                    {% if category.category_name == request.GET.c %}selected="selected"{% endif %}>
+                                    {{ category }}
+                                    </option>
+                                {% endfor %}
+                            </select>
                             <input class="searchbar" type="text" title="Search" name="q" value="{{ query }}">
                         </div>
                         <div class="buttons">
@@ -78,8 +87,17 @@
                 </div>
                 <form action="{% url 'home' %}" method="get">
                     <div class="bar">
+                        <select class="search_category" name="c">
+                            <option value="">Category search</option>
+                            {% for category in categories %}
+                                <option value="{{ category.category_name }}">
+                                {{ category }}
+                                </option>
+                            {% endfor %}
+                        </select>
                         <input class="searchbar" type="text" title="Search" name="q">
                     </div>
+                    <br/>
                     <div class="buttons">
                         <input class="button" type="submit" value="Search"></input>
                     </div>
