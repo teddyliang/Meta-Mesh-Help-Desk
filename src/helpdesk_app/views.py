@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from .forms import ProfileForm, SignUpForm, ResourceForm, CategoryForm
 from .models import AnswerResource, Category
 from django.conf import settings
+from django.http import JsonResponse
 # Flash messages
 from django.contrib import messages
 # Signup/Login stuff
@@ -24,11 +25,32 @@ logger.info("core.views logger")
 ##############################
 # Search model
 searcher = WebpageSearcher()
+AUTOCOMPLETE_MAX_RESULTS = 5
 ##############################
+
+
 def autocomplete_search(request):
-    query = request.GET.get('q', '')
-    autocomplete_result = AnswerResource.objects.filter(name__icontains=query)
-    return render(request, 'search.html', {"autocomplete_result" : autocomplete_result})
+    titles = list()
+    if 'term' in request.GET:
+        query = request.GET.get('term')
+        category = request.GET.get('c', '')
+        autocomplete_results = None
+        category_object = None
+        if category != '':
+            # Safely handles invalid input -- even if the user manually changes the "?c=" field
+            # to a category that doesn't exist, it will not filter on any category and return all matches
+            category_object = Category.objects.all().filter(category_name=category).first()
+        # Using the searcher
+        if query != '':
+            autocomplete_results = searcher.search(query, category_object)
+            if not len(autocomplete_results):
+                # Using just the title if no results came from the seracher
+                autocomplete_results = AnswerResource.objects.filter(title__icontains=query)
+
+        for resource in autocomplete_results:
+            titles.append(resource.title)
+    return JsonResponse(titles[:AUTOCOMPLETE_MAX_RESULTS], safe=False)
+
 
 def search(request):
     # TODO: This should be made async
@@ -49,7 +71,6 @@ def search(request):
         "results": results,
         "categories": categories
     })
-
 
 
 @login_required

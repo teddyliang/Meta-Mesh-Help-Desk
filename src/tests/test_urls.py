@@ -10,6 +10,14 @@ class HomePageTest(TestCase):
         response = self.client.get('/', follow=True)
         self.assertEqual(response.status_code, 200)
 
+class AutoCompleteTest(TestCase):
+    def test_autcomplete_page_view(self):
+        found = resolve('/autocomplete')
+        self.assertEqual(found.view_name, 'autocomplete')
+    def test_autocomplete_view(self):
+        response = self.client.get('/autocomplete', follow=True)
+        self.assertEqual(response.status_code, 200)
+        
 class AccountsPageTest(TestCase):
     def test_accounts_page_view(self):
         found = resolve('/accounts/')
