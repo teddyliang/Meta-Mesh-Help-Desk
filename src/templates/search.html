@@ -31,17 +31,6 @@
             } );
         </script>
     </head>
-    $(function() {
-        $('#myinput').autocomplete({
-          source: '/autocomplete/',
-          minLength: 2,
-          select: function(event, ui) {
-            $('#myinput').val(ui.item.text);
-            return false;
-          }
-        });
-      });
-    <center>
     
     {% if results != None %}
         <header>
@@ -59,7 +48,7 @@
                                     </option>
                                 {% endfor %}
                             </select>
-                            <input id="tags" class="searchbar" type="text" title="Search" name="q" value="{{ query }}">
+                            <input class="searchbar" type="text" title="Search" name="q" value="{{ query }}">
                         </div>
                         <div class="buttons">
                             <input class="button" type="submit" value="Search"></input>
