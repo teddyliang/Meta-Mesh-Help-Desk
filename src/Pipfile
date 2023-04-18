@@ -50,6 +50,8 @@ weasyprint = "==47"
 webencodings = "==0.5.1"
 whitenoise = "==6.0.0"
 wrapt = "==1.11.1"
+python-gettext = "*"
+django-rosetta = "==0.9.8"
 
 [dev-packages]
 flake8 = "*"
