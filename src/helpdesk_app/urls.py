@@ -18,6 +18,7 @@ from helpdesk_app import views
 
 urlpatterns = [
     path('', views.search, name='home'),
+    path('autocomplete', views.autocomplete_search, name='autocomplete'),
     path('home', views.search, name='home'),
     path('search', views.search, name='search'),
     path('signup/', views.signup, name="signup"),

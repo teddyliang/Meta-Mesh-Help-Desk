@@ -4,7 +4,7 @@ from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 
-class ResourceTests(TestCase):
+class SearchTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         # Create an admin user to test with
