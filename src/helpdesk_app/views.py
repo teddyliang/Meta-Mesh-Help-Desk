@@ -28,6 +28,7 @@ searcher = WebpageSearcher()
 AUTOCOMPLETE_MAX_RESULTS = 5
 ##############################
 
+
 def autocomplete_search(request):
     titles = list()
     if 'term' in request.GET:
@@ -49,6 +50,7 @@ def autocomplete_search(request):
         for resource in autocomplete_results:
             titles.append(resource.title)
     return JsonResponse(titles[:AUTOCOMPLETE_MAX_RESULTS], safe=False)
+
 
 def search(request):
     # TODO: This should be made async
