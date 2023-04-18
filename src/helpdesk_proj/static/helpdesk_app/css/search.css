@@ -31,6 +31,17 @@ li a:hover {
     bottom:4px;
 }
 
+.languagebutton{
+    background-color: #181818;
+    color: #fff;
+    border: 1px solid #5e5e5e;
+    border-radius: 3px;
+    padding: 7px 10px;
+    position: relative;
+    bottom: 7px;
+    font-weight: bold;
+}
+
 .signbutton{
     background-color: #4885ed;
     color: #fff;
@@ -126,6 +137,10 @@ li a:hover {
     margin:5px;
     border-radius:4px;
     outline:none;
+}
+
+.languagebutton:hover {
+    background-color: #515151;
 }
 
 .signbutton:hover {

@@ -21,19 +21,6 @@
     {% get_current_language as CURRENT_LANGUAGE %}
     {% get_available_languages as AVAILABLE_LANGUAGES %}
     {% get_language_info_list for AVAILABLE_LANGUAGES as languages %}
-    <div class="languages">
-        <p>{% trans "Language" %}:</p>
-        <ul class="languages">
-          {% for language in languages %}
-            <li>
-                <a href="/{{ language.code }}/search"
-                {% if language.code == CURRENT_LANGUAGE %} style="color: blue;"{% endif %}>
-                {{ language.name_local }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
     {% if results != None %}
         <header>
             <div class="space-between">
@@ -64,6 +51,11 @@
                     {% else %}
                         <li><a class="links" href="{% url 'login' %}"><button class="signbutton" type="button">{% trans "Staff Login" %}</button></a></li>
                     {% endif %}
+                    {% if CURRENT_LANGUAGE == 'en' %}
+                        <li><a class="links" href="/es/search"><button class="languagebutton" type="button">{% trans "English" %}</button></a></li>
+                    {% else %}
+                        <li><a class="links" href="/en/search"><button class="languagebutton" type="button">{% trans "Spanish" %}</button></a></li>
+                    {% endif %}
                 </ul>  
             </div>
         </header>
@@ -93,6 +85,11 @@
                     <li><a href="{% url 'account_redirect' %}">{% trans "Admin Panel" %}</a></li>
                 {% else %}
                     <li><a class="links" href="{% url 'login' %}"><button class="signbutton" type="button">{% trans "Staff Login" %}</button></a></li>
+                {% endif %}
+                {% if CURRENT_LANGUAGE == 'en' %}
+                    <li><a class="links" href="/es/search"><button class="languagebutton" type="button">{% trans "English" %}</button></a></li>
+                {% else %}
+                    <li><a class="links" href="/en/search"><button class="languagebutton" type="button">{% trans "Spanish" %}</button></a></li>
                 {% endif %}
             </ul>  
         </header>
