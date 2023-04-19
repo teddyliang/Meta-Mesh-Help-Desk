@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% load template_tags %}
+{% block pageContent %}
+    <div class="col-sm custom-grid">
+        <div class="well">
+            <div class="top-header">
+                <div>
+                    <h4 class="history-title">Frequently Asked Questions</h4>
+                </div>
+                <div class="home-right">
+                    <a href="{% url 'update_faq' %}">
+                        <button class="btn btn-primary">Update FAQ</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tools">
+                <div class="left-menu">
+                    <div class="dropdown" style="margin-right:10px">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter Categories
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <h4>Filter by:</h4>
+                            <form method="get">
+                                {{myFilter.form}}
+                                <button type="submit">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include 'messages.html' %}
+
+            {% for category_faq in faq %}
+                <div>
+                    <h4>{{ category_faq.category }}</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Category</th>
+                                <th scope="col">Query</th>
+                                <th scope="col">Occurrences</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        {% for r in category_faq.page %}
+                            <tr>
+                                <td>{{ r.category }}</td>
+                                <td>{{ r.raw_query }}</td>
+                                <td>{{ r.occurrences }}</td>
+                                <td><a href="{% url 'delete_query' id=r.id %}"><i class="material-icons md-48">delete</i></a></td>
+                            </tr>
+                        {% endfor %}
+                      </table>
+                    <div class="pagination">
+                        {% if category_faq.page.has_previous %}
+                            <a href="{% relative_url 1 category_faq.page_name request.GET.urlencode %}"><i class="material-icons md-48">keyboard_double_arrow_left</i></a>
+                            <a href="{% relative_url category_faq.page.previous_page_number category_faq.page_name request.GET.urlencode %}"><i class="material-icons md-48">keyboard_arrow_left</i></a>
+                        {% else %}
+                            <i class="material-icons md-48">keyboard_double_arrow_left</i>
+                            <i class="material-icons md-48">keyboard_arrow_left</i>
+                        {% endif %}&nbsp;
+                        <p>Page {{ category_faq.page.number }} of {{ category_faq.page.paginator.num_pages }}</p>
+                        {% if category_faq.page.has_next %}
+                            <a href="{% relative_url category_faq.page.next_page_number category_faq.page_name request.GET.urlencode %}"><i class="material-icons md-48">keyboard_arrow_right</i></a>
+                            <a href="{% relative_url category_faq.page.paginator.num_pages category_faq.page_name request.GET.urlencode %}"><i class="material-icons md-48">keyboard_double_arrow_right</i></a>
+                        {% else %}
+                            <i class="material-icons md-48">keyboard_arrow_right</i>
+                            <i class="material-icons md-48">keyboard_double_arrow_right</i>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                Sorry, there's no FAQ data right now.
+            {% endfor %}
+        </div>
+
+    </div>
+    <script>
+        const btn = document.getElementById('id_o').nextElementSibling;
+        btn.insertAdjacentHTML('beforebegin','<br/><br/>');
+        document.getElementById('id_o').previousElementSibling.style.display = "none";
+        document.getElementById('id_o').previousElementSibling.insertAdjacentHTML('beforebegin','<br/><br/><h4>Order by:<br/>');
+        document.getElementById('id_updated').type = 'date';
+    </script>
+{% endblock %}

@@ -185,3 +185,30 @@ li a:hover {
     margin-top: 0px;
     color: #bdc3c7;
 }
+
+.faq-box {
+    width: fit-content;
+    padding: 20px;
+    color: rgb(216, 216, 216);
+    border-radius:30px;
+    border:1px solid #3950A2;
+}
+
+.faq-box h2 {
+    margin-top: 0;
+}
+
+#faq-queries {
+    text-align: left;
+    line-height: 150%;
+}
+
+.faq-search {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    color: #3498db;
+    font-size: 16px;
+    text-decoration: underline;
+    cursor: pointer;
+}

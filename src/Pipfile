@@ -53,6 +53,7 @@ wrapt = "==1.11.1"
 sentence-transformers = "*"
 django-picklefield = "*"
 django-widget-tweaks = "==1.4.12"
+schedule = "*"
 
 [dev-packages]
 flake8 = "*"

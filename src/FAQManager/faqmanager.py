@@ -1,6 +1,11 @@
 from sentence_transformers import SentenceTransformer, util
 from helpdesk_app.models import Category, Query
+from schedule import every, repeat, run_pending
 import torch
+import time
+import threading
+
+QUERY_SIMILARITY_THRESHOLD = 0.65
 
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
@@ -14,7 +19,26 @@ class FAQManager:
             top_queries = Query.objects.order_by('-occurrences')[:limit]
         
         return top_queries
+    
+    def faq_to_json(faq):
+        result = []
+        for query in faq:
+            result.append({
+                "category": FAQManager.category_to_category_name(query.category),
+                "raw_query": query.raw_query,
+                "occurrences": query.occurrences,
+                "id": query.id
+            })
 
+        return result
+    
+    def category_to_category_name(category):
+        if category:
+            return category.category_name
+        
+        return "No Category"
+
+    @repeat(every(1).hour)
     def recalculate():
         categories = list(Category.objects.all())
         
@@ -37,11 +61,13 @@ class FAQManager:
                 query.encoded_query = encoding
                 query.save()
 
-            if len(new_queries) > 1:
+            # Only recalculate clusters if there are new queries
+            if len(new_queries) > 0:
                 encodings = torch.stack(old_query_encodings + new_query_encodings)
-                clusters = util.community_detection(encodings, min_community_size=1, threshold=0.65)
+                clusters = util.community_detection(encodings, min_community_size=1, threshold=QUERY_SIMILARITY_THRESHOLD)
 
-                for i, cluster in enumerate(clusters):
+                for cluster in clusters:
+                    # Count total occurrence across queries in this cluster
                     total_occurrences = 0
                     for query_idx in cluster:
                         if query_idx >= len(old_queries):
@@ -65,3 +91,12 @@ class FAQManager:
                             new_queries[query_idx - len(old_queries)].delete()
                         else:
                             old_queries[query_idx].delete()
+
+    def _scheduler():
+        while True:
+            run_pending()
+            time.sleep(1)
+
+    def start_scheduler():
+        scheduler_thread = threading.Thread(target=FAQManager._scheduler)
+        scheduler_thread.start()

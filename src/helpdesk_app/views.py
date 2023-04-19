@@ -5,8 +5,9 @@ from django.utils import timezone
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from FAQManager.faqmanager import FAQManager
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from .forms import ProfileForm, SignUpForm, ResourceForm, CategoryForm
-from .models import AnswerResource, Category
+from .models import AnswerResource, Category, Query
 from django.conf import settings
 from django.http import JsonResponse
 # Flash messages
@@ -27,6 +28,7 @@ logger.info("core.views logger")
 # Search model
 searcher = WebpageSearcher()
 AUTOCOMPLETE_MAX_RESULTS = 5
+FAQ_MAX_RESULTS = 5
 ##############################
 
 
@@ -53,6 +55,17 @@ def autocomplete_search(request):
     return JsonResponse(titles[:AUTOCOMPLETE_MAX_RESULTS], safe=False)
 
 
+def get_faq(request):
+    category_name = request.GET.get('category', None)
+
+    category = None
+    if category_name != None:
+        category = Category.objects.filter(category_name=category_name).first()
+
+    faq = FAQManager.get_top_queries(limit=FAQ_MAX_RESULTS, category=category)
+    return JsonResponse({"faq": FAQManager.faq_to_json(faq)})
+
+
 def search(request):
     # TODO: This should be made async
     query = request.GET.get('q', '')
@@ -67,7 +80,7 @@ def search(request):
     if query != '':
         results = searcher.search(query, category_object)
     else:
-        faq = FAQManager.get_top_queries(limit=5)
+        faq = FAQManager.faq_to_json(FAQManager.get_top_queries(limit=FAQ_MAX_RESULTS))
     categories = Category.objects.all()
 
     return render(request, 'search.html', {
@@ -360,3 +373,57 @@ def view_categories(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "categories.html", {"page_obj": page_obj, "myFilter": myFilter, "user": request.user})
+
+
+@login_required
+def view_faq(request):
+    categories = Category.objects.all()
+
+    myFilter = CategoryFilter(request.GET, queryset=categories)
+    categories = list(myFilter.qs)
+    categories.append(None)
+
+    faq_data = {}
+    for category in categories:
+        category_name = FAQManager.category_to_category_name(category)
+        faq = FAQManager.get_top_queries(limit=100, category=category)
+        faq_data[category_name] = FAQManager.faq_to_json(faq)
+
+    response = []
+    for category_name, faq in faq_data.items():
+        paginator = Paginator(faq, 5)
+        page_name = f'{category_name.lower().replace(" ", "")}_page'
+        page_number = request.GET.get(page_name)
+        page_obj = paginator.get_page(page_number)
+
+        response.append({
+            "category": category_name,
+            "page": page_obj,
+            "page_name": page_name
+        })
+
+    return render(request, "faq.html", {"faq": response, "myFilter": myFilter, "user": request.user})
+
+@login_required
+def update_faq(request):
+    FAQManager.recalculate()
+
+    messages.success(request, 'FAQ updated successfully.')
+    return redirect('/view_faq')
+
+@login_required
+def delete_query(request, id):
+    record = None
+    try:
+        record = Query.objects.get(id=id)
+    except:
+        messages.error(request, 'Invalid query.')
+        return redirect('/view_faq')
+
+    try:
+        record.delete()
+        messages.success(request, 'Query deleted successfully.')
+        return redirect('/view_faq')
+    except Exception as e:
+        messages.error(request, 'Deletion failed, see error: ' + str(e))
+    return redirect('/view_faq')

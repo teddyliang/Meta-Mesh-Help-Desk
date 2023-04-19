@@ -21,6 +21,7 @@ urlpatterns = [
     path('autocomplete', views.autocomplete_search, name='autocomplete'),
     path('home', views.search, name='home'),
     path('search', views.search, name='search'),
+    path('get_faq', views.get_faq, name="get_faq"),
     path('signup/', views.signup, name="signup"),
     path('accounts/', views.accounts, name="accounts"),
     path('account', views.account_redirect, name="account_redirect"),
@@ -37,4 +38,7 @@ urlpatterns = [
     path('update_category/<int:id>', views.update_category, name="update_category"),
     path('delete_category/<int:id>', views.delete_category, name="delete_category"),
     path('categories/', views.view_categories, name="categories"),
+    path('view_faq', views.view_faq, name="view_faq"),
+    path('update_faq', views.update_faq, name="update_faq"),
+    path('delete_query/<int:id>', views.delete_query, name="delete_query")
 ]

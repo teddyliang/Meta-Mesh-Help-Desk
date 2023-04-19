@@ -24,11 +24,56 @@
 
         <script>
             $( function() {
-              $( "#tags" ).autocomplete({
-                source: '{% url "autocomplete" %}',
-                minlength: 1
-              });
-            } );
+                $( "#tags" ).autocomplete({
+                    source: '{% url "autocomplete" %}',
+                    minlength: 1
+                });
+
+                $( "#main-category-select" ).on('change', function() {
+                    $.ajax({
+                        type: "GET",
+                        url: "/get_faq",
+                        data: {
+                            "category": this.value,
+                        },
+                        dataType: 'json',
+                        success: (data) => {
+                            var faq_box = document.getElementById("faq-queries")
+
+                            // Clear the existing faq_box content
+                            faq_box.innerHTML = ''
+
+                            // Build the new content for the faq_box
+                            data["faq"].forEach(faq => {
+                                var form = document.createElement('form')
+                                form.setAttribute('action', '/home')
+                                form.setAttribute('method', 'get')
+
+                                var category_input = document.createElement('input')
+                                category_input.setAttribute('type', 'hidden')
+                                category_input.setAttribute('name', 'c')
+                                category_input.setAttribute('value', faq.category)
+                                form.append(category_input)
+
+                                var query_input = document.createElement('input')
+                                query_input.setAttribute('type', 'hidden')
+                                query_input.setAttribute('name', 'q')
+                                query_input.setAttribute('value', faq.raw_query)
+                                form.append(query_input)
+
+                                var category_tag = "[" + faq.category + "]"
+                                var submit = document.createElement('input')
+                                submit.setAttribute('class', 'faq-search')
+                                submit.setAttribute('type', 'submit')
+                                submit.setAttribute('value', category_tag + " " + faq.raw_query)
+                                form.append(submit)
+
+                                faq_box.append(form)
+                            }); 
+                        }
+                    });
+                });
+            });
         </script>
     </head>
     
@@ -103,7 +148,7 @@
             </div>
             <form action="{% url 'home' %}" method="get">
                 <div class="bar">
-                    <select class="search_category" name="c">
+                    <select id="main-category-select" class="search_category" name="c">
                         <option value="">Category search</option>
                         {% for category in categories %}
                             <option value="{{ category.category_name }}">
@@ -119,6 +164,22 @@
             </form>
             </center>
         </div>
+        <br />
+        <br />
+        {% if faq != None %}
+            <div class="faq-box">
+                <h2>Frequently Asked Questions</h2>
+                <div id="faq-queries">
+                    {% for query in faq %}
+                        <form action="{% url 'home' %}" method="get">
+                            <input type="hidden" name="c" value="{{ query.category }}">
+                            <input class="faq-search" type="submit" value="[{{ query.category }}] {{ query.raw_query }}">
+                            <input type="hidden" name="q" value="{{ query.raw_query }}">
+                        </form>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </center>
     {% endif %}
 </html>
