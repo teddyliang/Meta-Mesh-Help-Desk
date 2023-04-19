@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from helpdesk_app.models import AnswerResource
+from helpdesk_app.models import AnswerResource, Query
 from django.db.utils import OperationalError
 
 nltk.download('punkt')
@@ -104,6 +104,16 @@ class WebpageSearcher:
         # Filter by category, if applicable
         if category_object is not None:
             sorted_links = [resource for resource in sorted_links if category_object in list(resource.categories.all())]
+
+        # If the query matches some resources add it to the FAQ system
+        if len(sorted_links) > 0:
+            Query.objects.create(
+                raw_query=query,
+                processed_query=processed_query,
+                encoded_query=None,
+                occurrences=1,
+                category=category_object
+            )
 
         # Return the most similar link
         return sorted_links[:min(SEARCH_LIST_LEN, len(sorted_links))]

@@ -3,6 +3,7 @@ import datetime
 from django.utils import timezone
 # Django
 from SearchEngine.WebpageSearcher import WebpageSearcher
+from FAQManager.faqmanager import FAQManager
 from django.shortcuts import render, redirect
 from .forms import ProfileForm, SignUpForm, ResourceForm, CategoryForm
 from .models import AnswerResource, Category
@@ -33,18 +34,22 @@ def search(request):
     category = request.GET.get('c', '')
     results = None
     category_object = None
+    faq = None
     if category != '':
         # Safely handles invalid input -- even if the user manually changes the "?c=" field
         # to a category that doesn't exist, it will not filter on any category and return all matches
         category_object = Category.objects.all().filter(category_name=category).first()
     if query != '':
         results = searcher.search(query, category_object)
+    else:
+        faq = FAQManager.get_top_queries(limit=5)
     categories = Category.objects.all()
 
     return render(request, 'search.html', {
         "query": query,
         "results": results,
-        "categories": categories
+        "categories": categories,
+        "faq": faq
     })
 
 

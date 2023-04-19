@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from taggit.managers import TaggableManager
+from picklefield.fields import PickledObjectField
 
 
 # Profile for user model (helpdesk staff)
@@ -41,6 +42,16 @@ class AnswerResource(models.Model):
     content = models.TextField(blank=True, default='')
     # Categories
     categories = models.ManyToManyField(Category)
+
+
+# Model to represent queries
+class Query(models.Model):
+    raw_query = models.TextField(blank=False, null=False)
+    processed_query = models.TextField(blank=False, null=False)
+    encoded_query = PickledObjectField(null=True)
+    occurrences = models.IntegerField()
+    # Category the query was a part of
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
 
 
 @receiver(post_save, sender=User)
