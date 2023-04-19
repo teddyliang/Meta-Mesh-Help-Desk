@@ -31,6 +31,17 @@ li a:hover {
     bottom:4px;
 }
 
+.languagebutton{
+    background-color: #181818;
+    color: #fff;
+    border: 1px solid #5e5e5e;
+    border-radius: 3px;
+    padding: 7px 10px;
+    position: relative;
+    bottom: 7px;
+    font-weight: bold;
+}
+
 .signbutton{
     background-color: #4885ed;
     color: #fff;
@@ -128,6 +139,10 @@ li a:hover {
     outline:none;
 }
 
+.languagebutton:hover {
+    background-color: #515151;
+}
+
 .signbutton:hover {
     background-color: #2b70e7;
 }
@@ -160,7 +175,9 @@ li a:hover {
 }
 
 .result {
-    margin-left: 8px;
+    padding: 8px;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 .result h2 {
@@ -184,6 +201,10 @@ li a:hover {
     font-size: 13px;
     margin-top: 0px;
     color: #bdc3c7;
+}
+
+.result-highlighted {
+    background-color: #1f1e1e;
 }
 
 .faq-box {

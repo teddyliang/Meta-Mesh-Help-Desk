@@ -72,6 +72,7 @@
             <li {% if request.resolver_match.url_name == 'accounts' %}class="active"{% endif %}><a href="{% url 'accounts' %}">All Staff</a></li>
             <li {% if request.resolver_match.url_name == 'account' or request.resolver_match.url_name == 'update_account' %}class="active"{% endif %}><a href="{% url 'account_redirect' %}">Account</a></li>
             <li {% if request.resolver_match.url_name == 'view_faq' or request.resolver_match.url_name == 'update_faq' %}class="active"{% endif %}><a href="{% url 'view_faq' %}">FAQ</a></li>
+            <li><a href="/rosetta">Rosetta</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
           {% else %}
             <li><a href="{% url 'login' %}">Login</a></li>
