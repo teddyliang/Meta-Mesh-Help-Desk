@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.utils import translation
 
-class ResourceTests(TestCase):
+class InternationalizationTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         # Mock translation strings to ensure tests don't fail in prod

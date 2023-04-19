@@ -19,6 +19,7 @@ from django.shortcuts import redirect
 
 urlpatterns = [
     path('', lambda request: redirect('search/', permanent=False), name='home'),
+    path('autocomplete', views.autocomplete_search, name='autocomplete'),
     path('signup/', views.signup, name="signup"),
     path('accounts/', views.accounts, name="accounts"),
     path('account', views.account_redirect, name="account_redirect"),

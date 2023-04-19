@@ -175,7 +175,9 @@ li a:hover {
 }
 
 .result {
-    margin-left: 8px;
+    padding: 8px;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 .result h2 {
@@ -199,4 +201,8 @@ li a:hover {
     font-size: 13px;
     margin-top: 0px;
     color: #bdc3c7;
+}
+
+.result-highlighted {
+    background-color: #1f1e1e;
 }
