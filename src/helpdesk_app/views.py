@@ -1,24 +1,26 @@
 # Time
 import datetime
 from django.utils import timezone
-# Django
+
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from FAQManager.faqmanager import FAQManager
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
+
 from .forms import ProfileForm, SignUpForm, ResourceForm, CategoryForm
 from .models import AnswerResource, Category, Query
-from django.conf import settings
+from .filters import UserFilter, ResourceFilter, CategoryFilter
+
+# Django
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.conf import settings
 # Flash messages
 from django.contrib import messages
-# Signup/Login stuff
+# Signup/Login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 # Paginator
 from django.core.paginator import Paginator
-# Filters
-from .filters import UserFilter, ResourceFilter, CategoryFilter
+
 # Logging
 import logging
 logger = logging.getLogger('ex_logger')
@@ -59,7 +61,7 @@ def get_faq(request):
     category_name = request.GET.get('category', None)
 
     category = None
-    if category_name != None:
+    if category_name is not None:
         category = Category.objects.filter(category_name=category_name).first()
 
     faq = FAQManager.get_top_queries(limit=FAQ_MAX_RESULTS, category=category)
@@ -404,12 +406,14 @@ def view_faq(request):
 
     return render(request, "faq.html", {"faq": response, "myFilter": myFilter, "user": request.user})
 
+
 @login_required
 def update_faq(request):
     FAQManager.recalculate()
 
     messages.success(request, 'FAQ updated successfully.')
     return redirect('/view_faq')
+
 
 @login_required
 def delete_query(request, id):

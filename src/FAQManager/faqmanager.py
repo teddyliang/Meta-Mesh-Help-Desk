@@ -9,6 +9,7 @@ QUERY_SIMILARITY_THRESHOLD = 0.65
 
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
+
 class FAQManager:
 
     def get_top_queries(limit=5, category=None):
@@ -17,9 +18,9 @@ class FAQManager:
             top_queries = Query.objects.filter(category=category).order_by('-occurrences')[:limit]
         else:
             top_queries = Query.objects.order_by('-occurrences')[:limit]
-        
+
         return top_queries
-    
+
     def faq_to_json(faq):
         result = []
         for query in faq:
@@ -31,17 +32,17 @@ class FAQManager:
             })
 
         return result
-    
+
     def category_to_category_name(category):
         if category:
             return category.category_name
-        
+
         return "No Category"
 
     @repeat(every(1).hour)
     def recalculate():
         categories = list(Category.objects.all())
-        
+
         # Append None to account for queries without a category
         categories.append(None)
 
@@ -74,14 +75,14 @@ class FAQManager:
                             total_occurrences += new_queries[query_idx - len(old_queries)].occurrences
                         else:
                             total_occurrences += old_queries[query_idx].occurrences
-                    
+
                     # Arbitrarily pick one query to represent the cluster
                     cluster_leader = None
                     if cluster[0] >= len(old_queries):
                         cluster_leader = new_queries[cluster[0] - len(old_queries)]
                     else:
                         cluster_leader = old_queries[cluster[0]]
-                    
+
                     cluster_leader.occurrences = total_occurrences
                     cluster_leader.save()
 
