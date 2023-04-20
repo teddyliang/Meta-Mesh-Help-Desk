@@ -32,29 +32,29 @@ def thumbsUpClicked(request):
     query = request.GET.get('title', '')
     resource = AnswerResource.objects.all().filter(title=query).first()
     if resource is None:
-        return redirect('/home')
+        return redirect('/search')
     resource.thumbsUps = resource.thumbsUps + 1
     print(resource.thumbsUps)
     resource.save()
-    return redirect('/home')
+    return redirect('/search')
 
 def resourceClicked(request):
     query = request.GET.get('title', '')
     resource = AnswerResource.objects.all().filter(title=query).first()
     if resource is None:
-        return redirect('/home')
+        return redirect('/search')
     resource.clicks = resource.clicks + 1
     resource.save()
-    return redirect('/home')
+    return redirect('/search')
 
 def resourceAppeared(request):
     query = request.GET.get('title', '')
     resource = AnswerResource.objects.all().filter(title=query).first()
     if resource is None:
-        return redirect('/home')
+        return redirect('/search')
     resource.appearances = resource.appearances + 1
     resource.save()
-    return redirect('/home')
+    return redirect('/search')
 
 
 def autocomplete_search(request):
@@ -115,7 +115,7 @@ def accounts(request):
         return render(request, "accounts.html", {"page_obj": page_obj, 'myFilter': myFilter, 'user': request.user})
     else:
         messages.error(request, 'You do not have permission to access this resource.')
-        return redirect('/home')
+        return redirect('/search')
 
 
 @login_required
@@ -133,10 +133,10 @@ def account(request, id):
             return render(request, "account.html", {'user': request.user, 'view_user': current_user, 'profile_form': profile_form})
         except:
             messages.error(request, 'Invalid user ID.')
-            return redirect('/home')
+            return redirect('/accounts')
     else:
         messages.error(request, 'You do not have permission to do that.')
-        return redirect('/home')
+        return redirect('/search')
 
 
 @login_required
@@ -174,7 +174,7 @@ def update_profile(request, id):
             record = User.objects.get(id=id)
         except:
             messages.error(request, 'This user does not exist.')
-            return redirect('/home')
+            return redirect('/accounts')
 
         if request.method == "POST":
             profile_form = ProfileForm(request.POST, instance=record.profile)
@@ -196,7 +196,7 @@ def update_profile(request, id):
             })
     else:
         messages.error(request, 'You do not have permission to do that.')
-        return redirect('/home')
+        return redirect('/search')
 
 
 @login_required
@@ -219,7 +219,7 @@ def signup(request):
         })
     else:
         messages.error(request, 'You do not have permission to do that.')
-        return redirect('/home')
+        return redirect('/search')
 
 
 @login_required

@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 {% load template_tags %}
 {% block pageContent %}
@@ -56,16 +57,18 @@
             } );
         </script>
     </head>
-    
+    {% get_current_language as CURRENT_LANGUAGE %}
+    {% get_available_languages as AVAILABLE_LANGUAGES %}
+    {% get_language_info_list for AVAILABLE_LANGUAGES as languages %}
     {% if results != None %}
         <header>
             <div class="space-between">
                 <div class="inline">
-                    <a href="{% url 'home' %}"><img class="small-logo" alt="Community Internet Solutions logo" src="{% static 'helpdesk_app/img/logo.png' %}"></a>
-                    <form class="inline" action="{% url 'home' %}" method="get">
+                    <a href="{% url 'search' %}"><img class="small-logo" alt="Community Internet Solutions logo" src="{% static 'helpdesk_app/img/logo.png' %}"></a>
+                    <form class="inline" action="{% url 'search' %}" method="get">
                         <div class="bar">
                             <select class="search_category" name="c">
-                                <option value="">Category search</option>
+                                <option value="">{% trans "Category search" %}</option>
                                 {% for category in categories %}
                                     <option value="{{ category.category_name }}"
                                     {% if category.category_name == request.GET.c %}selected="selected"{% endif %}>
@@ -76,17 +79,22 @@
                             <input id="tags" class="searchbar" type="text" title="Search" name="q" value="{{ query }}">
                         </div>
                         <div class="buttons">
-                            <input class="button" type="submit" value="Search"></input>
+                            <input class="button" type="submit" value="{% trans 'Search' %}"></input>
                         </div>
                     </form>
                     </div>
                 </div>
                 <ul>
                     {% if user.is_authenticated %}
-                        <li><a class="links" href="{% url 'logout' %}"><button class="signbutton" type="button">Logout</button></a></li>
-                        <li><a href="{% url 'account_redirect' %}">Admin Panel</a></li>
+                        <li><a class="links" href="{% url 'logout' %}"><button class="signbutton" type="button">{% trans "Logout" %}</button></a></li>
+                        <li><a href="{% url 'account_redirect' %}">{% trans "Admin Panel" %}</a></li>
                     {% else %}
-                        <li><a class="links" href="{% url 'login' %}"><button class="signbutton" type="button">Staff Login</button></a></li>
+                        <li><a class="links" href="{% url 'login' %}"><button class="signbutton" type="button">{% trans "Staff Login" %}</button></a></li>
+                    {% endif %}
+                    {% if CURRENT_LANGUAGE == 'en' %}
+                        <li><a class="links" href="/es/search"><button class="languagebutton" type="button">{% trans "English" %}</button></a></li>
+                    {% else %}
+                        <li><a class="links" href="/en/search"><button class="languagebutton" type="button">{% trans "Spanish" %}</button></a></li>
                     {% endif %}
                 </ul>  
             </div>
@@ -110,9 +118,9 @@
                 {% endfor %}
             {% else %}
                 <div class="result">
-                    <h2>No results found</h2>
+                    <h2>{% trans "No results found" %}</h2>
                     <!-- TODO: fill in with appropriate support number -->
-                    <p>Try calling ... for additional support</p>
+                    <p>{% trans "No results 2" %}</p>
                 </div>
             {% endif %}
         </div>
@@ -121,10 +129,15 @@
         <header>
             <ul>
                 {% if user.is_authenticated %}
-                    <li><a class="links" href="{% url 'logout' %}"><button class="signbutton" type="button">Logout</button></a></li>
-                    <li><a href="{% url 'account_redirect' %}">Admin Panel</a></li>
+                    <li><a class="links" href="{% url 'logout' %}"><button class="signbutton" type="button">{% trans "Logout" %}</button></a></li>
+                    <li><a href="{% url 'account_redirect' %}">{% trans "Admin Panel" %}</a></li>
                 {% else %}
-                    <li><a class="links" href="{% url 'login' %}"><button class="signbutton" type="button">Staff Login</button></a></li>
+                    <li><a class="links" href="{% url 'login' %}"><button class="signbutton" type="button">{% trans "Staff Login" %}</button></a></li>
+                {% endif %}
+                {% if CURRENT_LANGUAGE == 'en' %}
+                    <li><a class="links" href="/es/search"><button class="languagebutton" type="button">{% trans "English" %}</button></a></li>
+                {% else %}
+                    <li><a class="links" href="/en/search"><button class="languagebutton" type="button">{% trans "Spanish" %}</button></a></li>
                 {% endif %}
             </ul>  
         </header>
@@ -133,10 +146,10 @@
             <div class="logo">
                 <img alt="Google" src="{% static 'helpdesk_app/img/logo.png' %}">
             </div>
-            <form action="{% url 'home' %}" method="get">
+            <form action="{% url 'search' %}" method="get">
                 <div class="bar">
                     <select class="search_category" name="c">
-                        <option value="">Category search</option>
+                        <option value="">{% trans "Category search" %}</option>
                         {% for category in categories %}
                             <option value="{{ category.category_name }}">
                             {{ category }}
@@ -146,7 +159,7 @@
                     <input id="tags" class="searchbar" type="text" title="Search" name="q">
                 </div>
                 <div class="buttons">
-                    <input class="button" type="submit" value="Search"></input>
+                    <input class="button" type="submit" value="{% trans 'Search' %}"></input>
                 </div>
             </form>
             </center>

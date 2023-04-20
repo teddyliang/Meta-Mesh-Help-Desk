@@ -15,15 +15,14 @@ Including another URLconf
 """
 from django.urls import path
 from helpdesk_app import views
+from django.shortcuts import redirect
 
 urlpatterns = [
-    path('', views.search, name='home'),
-    path('thumbsUpClicked', views.thumbsUpClicked, name='thumbsUpClicked'),
-    path('resourceClicked', views.resourceClicked, name='resourceClicked'),
-    path('resourceAppeared', views.resourceAppeared, name='resourceAppeared'),
+    path('', lambda request: redirect('search/', permanent=False), name='home'),
+    path('en/search/thumbsUpClicked', views.thumbsUpClicked, name='thumbsUpClicked'),
+    path('en/search/resourceClicked', views.resourceClicked, name='resourceClicked'),
+    path('en/search/resourceAppeared', views.resourceAppeared, name='resourceAppeared'),
     path('autocomplete', views.autocomplete_search, name='autocomplete'),
-    path('home', views.search, name='home'),
-    path('search', views.search, name='search'),
     path('signup/', views.signup, name="signup"),
     path('accounts/', views.accounts, name="accounts"),
     path('account', views.account_redirect, name="account_redirect"),
