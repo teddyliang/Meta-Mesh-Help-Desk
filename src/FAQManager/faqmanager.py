@@ -7,7 +7,7 @@ import threading
 
 QUERY_SIMILARITY_THRESHOLD = 0.65
 
-embedder = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+embedder = SentenceTransformer(model_name_or_path='all-MiniLM-L6-v2', device='cpu')
 
 
 class FAQManager:
