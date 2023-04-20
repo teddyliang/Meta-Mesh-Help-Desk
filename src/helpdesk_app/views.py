@@ -28,6 +28,7 @@ searcher = WebpageSearcher()
 AUTOCOMPLETE_MAX_RESULTS = 5
 ##############################
 
+
 def thumbsUpClicked(request):
     query = request.GET.get('title', '')
     resource = AnswerResource.objects.all().filter(title=query).first()
@@ -38,6 +39,7 @@ def thumbsUpClicked(request):
     resource.save()
     return redirect('/search')
 
+
 def resourceClicked(request):
     query = request.GET.get('title', '')
     resource = AnswerResource.objects.all().filter(title=query).first()
@@ -46,6 +48,7 @@ def resourceClicked(request):
     resource.clicks = resource.clicks + 1
     resource.save()
     return redirect('/search')
+
 
 def resourceAppeared(request):
     query = request.GET.get('title', '')
