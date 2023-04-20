@@ -19,9 +19,6 @@ from django.shortcuts import redirect
 
 urlpatterns = [
     path('', lambda request: redirect('search/', permanent=False), name='home'),
-    path('en/search/thumbsUpClicked', views.thumbsUpClicked, name='thumbsUpClicked'),
-    path('en/search/resourceClicked', views.resourceClicked, name='resourceClicked'),
-    path('en/search/resourceAppeared', views.resourceAppeared, name='resourceAppeared'),
     path('autocomplete', views.autocomplete_search, name='autocomplete'),
     path('signup/', views.signup, name="signup"),
     path('accounts/', views.accounts, name="accounts"),

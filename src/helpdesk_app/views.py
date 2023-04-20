@@ -29,7 +29,7 @@ AUTOCOMPLETE_MAX_RESULTS = 5
 ##############################
 
 
-def thumbsUpClicked(request):
+def thumbs_up_clicked(request):
     query = request.GET.get('title', '')
     resource = AnswerResource.objects.all().filter(title=query).first()
     if resource is None:
@@ -40,7 +40,7 @@ def thumbsUpClicked(request):
     return redirect('/search')
 
 
-def resourceClicked(request):
+def resource_clicked(request):
     query = request.GET.get('title', '')
     resource = AnswerResource.objects.all().filter(title=query).first()
     if resource is None:
@@ -50,7 +50,7 @@ def resourceClicked(request):
     return redirect('/search')
 
 
-def resourceAppeared(request):
+def resource_appeared(request):
     query = request.GET.get('title', '')
     resource = AnswerResource.objects.all().filter(title=query).first()
     if resource is None:
