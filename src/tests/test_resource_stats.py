@@ -1,4 +1,4 @@
-from helpdesk_app.views import thumbsUpClicked, new_resource, resourceAppeared, resourceClicked
+from helpdesk_app.views import thumbs_up_clicked, new_resource, resource_appeared, resource_clicked
 from helpdesk_app.models import AnswerResource, Category
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
@@ -68,13 +68,13 @@ class ResourceStatsTests(TestCase):
         setattr(request, '_messages', FallbackStorage(request))
 
         # Same as making a GET request to '/thumsUpClicked')
-        response = thumbsUpClicked(request)
+        response = thumbs_up_clicked(request)
        
         # checks to see if the data object has been updated properly    
         self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().thumbsUps, 1)
 
         # doing it again for redundency
-        response = thumbsUpClicked(request)
+        response = thumbs_up_clicked(request)
         self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().thumbsUps, 2)
 
     def test_resource_appeared(self):
@@ -86,13 +86,13 @@ class ResourceStatsTests(TestCase):
         setattr(request, '_messages', FallbackStorage(request))
 
         # Same as making a GET request to '/thumsUpClicked')
-        response = resourceAppeared(request)
+        response = resource_appeared(request)
        
         # checks to see if the data object has been updated properly    
         self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().appearances, 1)
 
         # doing it again for redundency
-        response = resourceAppeared(request)
+        response = resource_appeared(request)
         self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().appearances, 2)
 
     def test_resource_clicked(self):
@@ -104,13 +104,13 @@ class ResourceStatsTests(TestCase):
         setattr(request, '_messages', FallbackStorage(request))
 
         # Same as making a GET request to '/thumsUpClicked')
-        response = resourceClicked(request)
+        response = resource_clicked(request)
        
         # checks to see if the data object has been updated properly    
         self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().clicks, 1)
 
         # doing it again for redundency
-        response = resourceClicked(request)
+        response = resource_clicked(request)
         self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().clicks, 2)
 
     
