@@ -41,6 +41,10 @@ class AnswerResource(models.Model):
     content = models.TextField(blank=True, default='')
     # Categories
     categories = models.ManyToManyField(Category)
+    # Statistic fields
+    appearances = models.IntegerField(blank=True, default=0)
+    clicks = models.IntegerField(blank=True, default=0)
+    thumbsUps = models.IntegerField(blank=True, default=0)
 
 
 @receiver(post_save, sender=User)
