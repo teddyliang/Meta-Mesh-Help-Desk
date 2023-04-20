@@ -15,8 +15,21 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/search.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <script src="{% static 'helpdesk_app/js/linkify.js' %}"></script>
+        <script>
+            function thumbsUpClicked(element) {
+                // $.ajax({
+                //     url: "thumbsUpClicked"
+                //     data: {element}
+                // })
+                element.style.color = "green"
+                setTimeout(function() {
+                    element.style.display = 'none';
+                }, 300);
+            }
+        </script>
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
@@ -73,6 +86,13 @@
                         <h2>{{ result.title }}</h2>
                         <a href="{{ result.url }}">{{ result.url }}</a>
                         <p>{{ result.updated|date:"F jS Y" }} - {{ result.blurb }}</p>
+
+                        <!-- Thumbs up button -->
+                        <p href="{% url 'logout' %}" onclick=thumbsUpClicked(this) style="cursor: pointer;">
+                            Was this helpful? 
+                            <i class="fa fa-thumbs-up"></i> 
+                        </p>
+
                     </div>
                     <br>
                 {% endfor %}
