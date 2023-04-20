@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 03:30+0000\n"
+"POT-Creation-Date: 2023-04-27 19:01+0000\n"
 "PO-Revision-Date: 2023-04-25 03:31+0000\n"
 "Last-Translator:   <admin@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,47 +19,45 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: helpdesk_proj/settings.py:105 templates/search.html:123
-#: templates/search.html:166
+#: helpdesk_proj/settings.py:107 templates/search.html:196
 msgid "English"
 msgstr "Inglés"
 
-#: helpdesk_proj/settings.py:106 templates/search.html:125
-#: templates/search.html:168
+#: helpdesk_proj/settings.py:108 templates/search.html:198
 msgid "Spanish"
 msgstr "Español"
 
-#: templates/search.html:99 templates/search.html:180
+#: templates/search.html:112 templates/search.html:162
 msgid "Category search"
 msgstr "Categoría"
 
-#: templates/search.html:110 templates/search.html:190
+#: templates/search.html:123 templates/search.html:173
 msgid "Search"
 msgstr "Buscar"
-
-#: templates/search.html:117 templates/search.html:160
-msgid "Logout"
-msgstr "Cerrar sesión"
-
-#: templates/search.html:118 templates/search.html:161
-msgid "Admin Panel"
-msgstr "Administrador"
-
-#: templates/search.html:120 templates/search.html:163
-msgid "Staff Login"
-msgstr "Inicio de sesión de administrador"
 
 #: templates/search.html:149
 msgid "No results found"
 msgstr "No se han encontrado resultados"
 
-#: templates/search.html:151
+#: templates/search.html:150
 msgid "No results 2"
 msgstr "Intenta llamar a XXX"
 
-#: templates/search.html:199
+#: templates/search.html:182
 msgid "Frequently Asked Questions"
 msgstr "Preguntas Frecuentes"
+
+#: templates/search.html:201
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+#: templates/search.html:202
+msgid "Admin Panel"
+msgstr "Administrador"
+
+#: templates/search.html:204
+msgid "Staff Login"
+msgstr "Inicio de sesión de administrador"
 
 #~ msgid "Language"
 #~ msgstr "Idioma"

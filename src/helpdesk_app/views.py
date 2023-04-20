@@ -83,6 +83,9 @@ def autocomplete_search(request):
     if 'term' in request.GET:
         query = request.GET.get('term')
         category = request.GET.get('c', '')
+        # if not category was actually selected
+        if category == "Category search" or category == "Categoría":
+            category = ""
         autocomplete_results = None
         category_object = None
         if category != '':
@@ -95,9 +98,10 @@ def autocomplete_search(request):
             if not len(autocomplete_results):
                 # Using just the title if no results came from the seracher
                 autocomplete_results = AnswerResource.objects.filter(title__icontains=query)
-
+                if category != '':
+                    autocomplete_results = [resource for resource in autocomplete_results if category_object in list(resource.categories.all())]
         for resource in autocomplete_results:
-            titles.append(resource.title)
+                titles.append(resource.title)
     return JsonResponse(titles[:AUTOCOMPLETE_MAX_RESULTS], safe=False)
 
 
