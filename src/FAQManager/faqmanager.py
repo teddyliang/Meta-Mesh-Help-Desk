@@ -10,7 +10,7 @@ QUERY_SIMILARITY_THRESHOLD = 0.65
 
 embedder = None
 
-if 'test' in sys.argv:
+if 'test' not in sys.argv:
     embedder = SentenceTransformer(model_name_or_path='all-MiniLM-L6-v2', device='cpu')
 
 class FAQManager:
