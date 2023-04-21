@@ -4,11 +4,14 @@ from schedule import every, repeat, run_pending
 import torch
 import time
 import threading
+import sys
 
 QUERY_SIMILARITY_THRESHOLD = 0.65
 
-embedder = SentenceTransformer(model_name_or_path='all-MiniLM-L6-v2', device='cpu')
+embedder = None
 
+if 'test' in sys.argv:
+    embedder = SentenceTransformer(model_name_or_path='all-MiniLM-L6-v2', device='cpu')
 
 class FAQManager:
 
@@ -41,6 +44,9 @@ class FAQManager:
 
     @repeat(every(1).hour)
     def recalculate():
+        if embedder == None:
+            return
+
         categories = list(Category.objects.all())
 
         # Append None to account for queries without a category
