@@ -111,20 +111,7 @@
                         </div>
                     </form>
                     </div>
-                </div>
-                <ul>
-                    {% if user.is_authenticated %}
-                        <li><a class="links" href="{% url 'logout' %}"><button class="signbutton" type="button">{% trans "Logout" %}</button></a></li>
-                        <li><a href="{% url 'account_redirect' %}">{% trans "Admin Panel" %}</a></li>
-                    {% else %}
-                        <li><a class="links" href="{% url 'login' %}"><button class="signbutton" type="button">{% trans "Staff Login" %}</button></a></li>
-                    {% endif %}
-                    {% if CURRENT_LANGUAGE == 'en' %}
-                        <li><a class="links" href="/es/search"><button class="languagebutton" type="button">{% trans "English" %}</button></a></li>
-                    {% else %}
-                        <li><a class="links" href="/en/search"><button class="languagebutton" type="button">{% trans "Spanish" %}</button></a></li>
-                    {% endif %}
-                </ul>  
+                </div>  
             </div>
         </header>
         <div class="results-area">
@@ -147,33 +134,15 @@
             {% else %}
                 <div class="result">
                     <h2>{% trans "No results found" %}</h2>
-                    <!-- TODO: fill in with appropriate support number -->
                     <p>{% trans "No results 2" %}</p>
                 </div>
             {% endif %}
         </div>
     {% else %}
     <center>
-        <header>
-            <ul>
-                {% if user.is_authenticated %}
-                    <li><a class="links" href="{% url 'logout' %}"><button class="signbutton" type="button">{% trans "Logout" %}</button></a></li>
-                    <li><a href="{% url 'account_redirect' %}">{% trans "Admin Panel" %}</a></li>
-                {% else %}
-                    <li><a class="links" href="{% url 'login' %}"><button class="signbutton" type="button">{% trans "Staff Login" %}</button></a></li>
-                {% endif %}
-                {% if CURRENT_LANGUAGE == 'en' %}
-                    <li><a class="links" href="/es/search"><button class="languagebutton" type="button">{% trans "English" %}</button></a></li>
-                {% else %}
-                    <li><a class="links" href="/en/search"><button class="languagebutton" type="button">{% trans "Spanish" %}</button></a></li>
-                {% endif %}
-            </ul>  
-        </header>
         <div class="centered">
             <center>
-            <div class="logo">
-                <img alt="Google" src="{% static 'helpdesk_app/img/logo.png' %}">
-            </div>
+            <img alt="Logo" class="logo" src="{% static 'helpdesk_app/img/logo.png' %}">
             <form action="{% url 'search' %}" method="get">
                 <div class="bar">
                     <select class="search_category" name="c" id="main-category-select">
@@ -186,6 +155,7 @@
                     </select>
                     <input id="tags" class="searchbar" type="text" title="Search" name="q">
                 </div>
+                <br/>
                 <div class="buttons">
                     <input class="button" type="submit" value="{% trans 'Search' %}"></input>
                 </div>
@@ -206,5 +176,21 @@
         {% endif %}
     </center>
     {% endif %}
+    <footer>
+        <p>{% get_company_name "short" %} Helpdesk &#169 {% now 'Y' %}</p>
+        <div class="footer-buttons">
+            {% if CURRENT_LANGUAGE == 'en' %}
+                <a class="links" href="/es/search"><button class="standard-button" type="button">{% trans "English" %}</button></a>
+            {% else %}
+                <a class="links" href="/en/search"><button class="standard-button" type="button">{% trans "Spanish" %}</button></a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <a class="links" href="{% url 'logout' %}"><button class="sign-button" type="button">{% trans "Logout" %}</button></a>
+                <a class="links" href="{% url 'account_redirect' %}"><button class="standard-button" type="button">{% trans "Admin Panel" %}</button></a>
+            {% else %}
+                <a class="links" href="{% url 'login' %}"><button class="standard-button" type="button">{% trans "Staff Login" %}</button></a>
+            {% endif %}
+        </div>
+    </footer>
 </html>
 {% endblock pageContent%}
