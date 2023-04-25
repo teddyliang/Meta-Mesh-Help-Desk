@@ -196,7 +196,7 @@
         <br />
         {% if faq != None %}
             <div class="faq-box">
-                <h2>{% trans "Frequently Asked Questions" %}</h2>
+                <h3>{% trans "Frequently Asked Questions" %}</h3>
                 <div id="faq-queries">
                     {% for resource in faq %}
                         <a href="{{ resource.url }}">{{ resource.title }}</a> <br>
