@@ -33,6 +33,9 @@ urlpatterns = [
 # (for now, only the search page as that's the only page that non-employees can see)
 urlpatterns += i18n_patterns(
     path("search/", views.search, name="search"),
+    path('search/thumbsUpClicked', views.thumbs_up_clicked, name='thumbsUpClicked'),
+    path('search/resourceClicked', views.resource_clicked, name='resourceClicked'),
+    path('search/resourceAppeared', views.resource_appeared, name='resourceAppeared'),
 )
 
 urlpatterns += staticfiles_urlpatterns()

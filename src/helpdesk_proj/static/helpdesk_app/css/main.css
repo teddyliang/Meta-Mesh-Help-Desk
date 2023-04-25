@@ -406,6 +406,10 @@ input:read-only {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); /* 7 cols */
     }
 
+    .data-grid-8 {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); /* 8 cols */
+    }
+
     li.data-item {
         /* On mobile, separate rows by having a faint
         separator between data-item elements. But we don't want

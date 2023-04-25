@@ -29,6 +29,37 @@ AUTOCOMPLETE_MAX_RESULTS = 5
 ##############################
 
 
+def thumbs_up_clicked(request):
+    query = request.GET.get('title', '')
+    resource = AnswerResource.objects.all().filter(title=query).first()
+    if resource is None:
+        return redirect('/search')
+    resource.thumbsUps = resource.thumbsUps + 1
+    print(resource.thumbsUps)
+    resource.save()
+    return redirect('/search')
+
+
+def resource_clicked(request):
+    query = request.GET.get('title', '')
+    resource = AnswerResource.objects.all().filter(title=query).first()
+    if resource is None:
+        return redirect('/search')
+    resource.clicks = resource.clicks + 1
+    resource.save()
+    return redirect('/search')
+
+
+def resource_appeared(request):
+    query = request.GET.get('title', '')
+    resource = AnswerResource.objects.all().filter(title=query).first()
+    if resource is None:
+        return redirect('/search')
+    resource.appearances = resource.appearances + 1
+    resource.save()
+    return redirect('/search')
+
+
 def autocomplete_search(request):
     titles = list()
     if 'term' in request.GET:

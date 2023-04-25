@@ -16,13 +16,38 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/search.css' %}">
-
-        <script src="{% static 'helpdesk_app/js/linkify.js' %}"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
         <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/jquery-ui.css' %}">
-
+        <script src="{% static 'helpdesk_app/js/linkify.js' %}"></script>
+        <!-- scripts to handle resource statistics -->
+        <script>
+            function thumbsUpClicked(element, title) {
+                console.log(title)
+                $.ajax({
+                    url: "thumbsUpClicked",
+                    data: {'title': title}
+                })
+                element.style.color = "green"
+                setTimeout(function() {
+                    element.style.display = 'none';
+                }, 300);
+            }
+            function resourceClicked(element, title) {
+                $.ajax({
+                    url: "resourceClicked",
+                    data: {'title': title}
+                })
+            }
+            function resourceAppeared(element, title) {
+                $.ajax({
+                    url: "resourceAppeared",
+                    data: {'title': title}
+                })
+            }
+        </script>
+        <!-- autocomplete script -->
         <script>
             $( function() {
               $( "#tags" ).autocomplete({
@@ -79,8 +104,15 @@
                 {% for result in results %}
                     <div class="result {% if not forloop.counter0|divisibleby:2 %}result-highlighted{% endif %}">
                         <h2>{{ result.title }}</h2>
-                        <a href="{{ result.url }}">{{ result.url }}</a>
+                        <a  onclick="resourceClicked.bind(this, this, '{{ result.title }}')()" href="{{ result.url }}">{{ result.url }}</a>
                         <p>{{ result.updated|date:"F jS Y" }} - {{ result.blurb }}</p>
+
+                        <!-- Thumbs up button -->
+                        <p href="{% url 'logout' %}" onclick="thumbsUpClicked.bind(this, this, '{{ result.title }}')()" style="cursor: pointer;">
+                            Was this helpful? 
+                            <i class="fa fa-thumbs-up"></i> 
+                        </p>
+                        <script>resourceAppeared(this, '{{ result.title }}');</script>
                     </div>
                     <br>
                 {% endfor %}
