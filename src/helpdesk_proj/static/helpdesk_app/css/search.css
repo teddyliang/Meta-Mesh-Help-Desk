@@ -31,26 +31,28 @@ li a:hover {
     bottom:4px;
 }
 
-.languagebutton{
+.standard-button {
     background-color: #181818;
     color: #fff;
     border: 1px solid #5e5e5e;
     border-radius: 3px;
     padding: 7px 10px;
     position: relative;
-    bottom: 7px;
     font-weight: bold;
 }
 
-.signbutton{
+.sign-button {
     background-color: #4885ed;
     color: #fff;
     border:none;
     border-radius:3px;
     padding:7px 10px;
     position:relative;
-    bottom:7px;
     font-weight:bold;
+}
+
+.logo {
+    width: 70%;
 }
 
 .small-logo {
@@ -67,9 +69,11 @@ li a:hover {
 .inline {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .centered {
+    margin-top: 10%;
     width: 100%;
     height: 100%;
     display: flex;
@@ -80,12 +84,11 @@ li a:hover {
 
 .bar {
     display: flex;
-    margin:0 auto;
-    width:575px;
+    margin: 1%;
+    width: 80%;
     height: 45px;
     border-radius:30px;
     border:1px solid #3950A2;
-    justify-content: center;
     align-items: center;
 }
 
@@ -101,7 +104,7 @@ li a:hover {
 .search_category{
     margin-left: 3%;
     height: 100%;
-    width: 23%;
+    width: 11em;
     background: none;
     color: #8b8b8b;
     margin-right: 2%;
@@ -112,10 +115,10 @@ li a:hover {
 }
 
 .searchbar{
-    height:80%;
-    border:none;
-    width:68%;
-    font-size:16px;
+    height: 80%;
+    border: none;
+    width: calc(97% - 12em);
+    font-size: 16px;
     outline: none;
     background-color: #181818;
     color: rgb(231, 231, 231);
@@ -197,7 +200,7 @@ li a:hover {
 }
 
 .result p {
-    width: 625px;
+    width: 100%;
     font-size: 13px;
     margin-top: 0px;
     color: #bdc3c7;
@@ -208,6 +211,7 @@ li a:hover {
 }
 
 .faq-box {
+    margin-top: 2%;
     width: fit-content;
     padding: 20px;
     color: rgb(216, 216, 216);
@@ -226,4 +230,40 @@ li a:hover {
 
 #faq-queries a {
     color: #3498db;
+}
+
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #202020;
+    text-align: center;
+}
+
+footer p {
+    color: white;
+    margin-top: 20px;
+}
+
+.footer-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.footer-buttons a {
+    padding: 4px;
+}
+
+@media (max-width: 750px) {
+    .small-logo {
+        display: none;
+    }
+
+    .faq-box {
+        margin-top: 20%;
+        width: 67%;
+    }
 }
