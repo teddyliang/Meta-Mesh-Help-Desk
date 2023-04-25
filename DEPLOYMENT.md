@@ -4,6 +4,7 @@ These were the steps I followed when setting up the web server for the help desk
 
 1. Launch Ubuntu 20.04 LTS instance from AWS console
    1. Create a key-pair and download it for SSH access in next steps
+![Instance](images/instance.jpg)
 2. Click on the newly provisioned instance from the list of instances
 3. Click on ‘Security’
 4. Click on the security group below “Security groups”
@@ -11,6 +12,7 @@ These were the steps I followed when setting up the web server for the help desk
    2. Type: ‘Custom TCP’
    3. Port: 8000
    4. CIDR Block: 0.0.0.0/0
+![Security Group](images/securitygroup.jpg)
 6. Return to instance overview
 7. Click on the ‘connect’ button in the top right
 8. Follow the instructions to connect via SSH.
