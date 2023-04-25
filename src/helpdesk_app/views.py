@@ -26,6 +26,7 @@ logger.info("core.views logger")
 # Search model
 searcher = WebpageSearcher()
 AUTOCOMPLETE_MAX_RESULTS = 5
+FAQ_MAX_RESULTS = 5
 ##############################
 
 
@@ -60,6 +61,23 @@ def resource_appeared(request):
     return redirect('/search')
 
 
+def faq_for_category(category):
+    if category is None:
+        return list(AnswerResource.objects.order_by('-appearances').values()[:FAQ_MAX_RESULTS])
+
+    return list(AnswerResource.objects.filter(categories__in=[category]).order_by('-appearances').values()[:FAQ_MAX_RESULTS])
+
+
+def get_faq(request):
+    category_name = request.GET.get('category', None)
+
+    category = None
+    if category_name is not None:
+        category = Category.objects.filter(category_name=category_name).first()
+
+    return JsonResponse({"faq": faq_for_category(category)})
+
+
 def autocomplete_search(request):
     titles = list()
     if 'term' in request.GET:
@@ -89,18 +107,25 @@ def search(request):
     category = request.GET.get('c', '')
     results = None
     category_object = None
+    faq = None
+
     if category != '':
         # Safely handles invalid input -- even if the user manually changes the "?c=" field
         # to a category that doesn't exist, it will not filter on any category and return all matches
         category_object = Category.objects.all().filter(category_name=category).first()
-    if query != '':
+
+    if query == '':
+        faq = faq_for_category(category_object)
+    else:
         results = searcher.search(query, category_object)
+
     categories = Category.objects.all()
 
     return render(request, 'search.html', {
         "query": query,
         "results": results,
-        "categories": categories
+        "categories": categories,
+        "faq": faq
     })
 
 
