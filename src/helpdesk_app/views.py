@@ -62,9 +62,9 @@ def resource_appeared(request):
 
 
 def faq_for_category(category):
-    if category == None:
+    if category is None:
         return list(AnswerResource.objects.order_by('-appearances').values()[:FAQ_MAX_RESULTS])
-    
+
     return list(AnswerResource.objects.filter(categories__in=[category]).order_by('-appearances').values()[:FAQ_MAX_RESULTS])
 
 
