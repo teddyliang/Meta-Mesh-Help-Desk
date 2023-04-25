@@ -206,3 +206,24 @@ li a:hover {
 .result-highlighted {
     background-color: #1f1e1e;
 }
+
+.faq-box {
+    width: fit-content;
+    padding: 20px;
+    color: rgb(216, 216, 216);
+    border-radius:30px;
+    border:1px solid #3950A2;
+}
+
+.faq-box h2 {
+    margin-top: 0;
+}
+
+#faq-queries {
+    text-align: left;
+    line-height: 150%;
+}
+
+#faq-queries a {
+    color: #3498db;
+}

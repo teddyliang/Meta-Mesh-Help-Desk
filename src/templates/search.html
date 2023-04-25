@@ -47,14 +47,42 @@
                 })
             }
         </script>
-        <!-- autocomplete script -->
+        <!-- autocomplete / FAQ script -->
         <script>
             $( function() {
-              $( "#tags" ).autocomplete({
-                source: '{% url "autocomplete" %}',
-                minlength: 1
-              });
-            } );
+                $( "#tags" ).autocomplete({
+                    source: '{% url "autocomplete" %}',
+                    minlength: 1
+                });
+
+                $( "#main-category-select" ).on('change', function() {
+                    $.ajax({
+                        type: "GET",
+                        url: "/get_faq",
+                        data: {
+                            "category": this.value,
+                        },
+                        dataType: 'json',
+                        success: (data) => {
+                            var faq_box = document.getElementById("faq-queries")
+
+                            // Clear the existing faq_box content
+                            faq_box.innerHTML = ''
+
+                            // Build the new content for the faq_box
+                            data["faq"].forEach(resource => {
+                                var link = document.createElement('a')
+                                var br = document.createElement('br')
+                                link.setAttribute('href', resource.url)
+                                link.innerText = resource.title
+
+                                faq_box.append(link)
+                                faq_box.append(br)
+                            }); 
+                        }
+                    });
+                });
+            });
         </script>
     </head>
     {% get_current_language as CURRENT_LANGUAGE %}
@@ -148,7 +176,7 @@
             </div>
             <form action="{% url 'search' %}" method="get">
                 <div class="bar">
-                    <select class="search_category" name="c">
+                    <select class="search_category" name="c" id="main-category-select">
                         <option value="">{% trans "Category search" %}</option>
                         {% for category in categories %}
                             <option value="{{ category.category_name }}">
@@ -164,6 +192,18 @@
             </form>
             </center>
         </div>
+        <br />
+        <br />
+        {% if faq != None %}
+            <div class="faq-box">
+                <h2>{% trans "Frequently Asked Questions" %}</h2>
+                <div id="faq-queries">
+                    {% for resource in faq %}
+                        <a href="{{ resource.url }}">{{ resource.title }}</a> <br>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </center>
     {% endif %}
 </html>
