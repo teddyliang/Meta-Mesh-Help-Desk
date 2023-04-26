@@ -26,7 +26,7 @@ logger.info("core.views logger")
 # Search model
 searcher = WebpageSearcher()
 AUTOCOMPLETE_MAX_RESULTS = 5
-FAQ_MAX_RESULTS = 5
+AUTOCOMPLETE_RESOURCE_TITLE_MAX_LENGTH = 40
 ##############################
 
 
@@ -101,6 +101,9 @@ def autocomplete_search(request):
                 if category != '':
                     autocomplete_results = [resource for resource in autocomplete_results if category_object in list(resource.categories.all())]
         for resource in autocomplete_results:
+            if len(resource.title) > AUTOCOMPLETE_RESOURCE_TITLE_MAX_LENGTH:
+                titles.append(resource.title[:AUTOCOMPLETE_RESOURCE_TITLE_MAX_LENGTH] + "...")
+            else:
                 titles.append(resource.title)
     return JsonResponse(titles[:AUTOCOMPLETE_MAX_RESULTS], safe=False)
 
