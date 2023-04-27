@@ -1,3 +1,9 @@
+'''
+This file concerns the default Django administration backend. This is different
+from the "Admin Panel" which is a user-friendly interface to manage the application.
+The Django backend allows more exhaustive and potentially dangerous control over the
+system. You can navigate to it by going to `<url>/admin`.
+'''
 from django.contrib import admin
 from .models import Profile, AnswerResource, Category
 from django.contrib.auth.admin import UserAdmin

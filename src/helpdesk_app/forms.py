@@ -1,15 +1,14 @@
+'''
+This file defines all forms for each of the models. Since most of these
+are `ModelForm`s, we can define which fields from the model we would like to
+include and Django will automatically create the relevant input fields based
+on the field's datatype and/or limitations. However, we can also define custom
+fields, as is done in the SignUpForm.
+'''
 from .models import Profile, AnswerResource, Category
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
-
-class DateInput(forms.DateInput):
-    input_type = 'date'
-
-
-class NumberInput(forms.NumberInput):
-    input_type = 'number'
 
 
 class SignUpForm(UserCreationForm):
@@ -35,6 +34,10 @@ class ResourceForm(forms.ModelForm):
         fields = ['title', 'url', 'blurb', 'tags', 'categories']
 
     def __init__(self, *args, **kwargs):
+        '''
+        This is done to be able to change the default labels for the fields. Otherwise, it would display
+        "Title: ..." or "URL: ...".
+        '''
         super(ResourceForm, self).__init__(*args, **kwargs)
         self.fields['title'].label = 'A short title describing the resource'
         self.fields['url'].label = 'A static URL associated with this resource that users will be directed to'

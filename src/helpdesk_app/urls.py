@@ -1,18 +1,17 @@
-"""helpdesk_app URL Configuration
-
+'''
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+
+Please note that there are two files: `helpdesk_app/urls.py` and `helpdesk_proj/urls.py`.
+The `urls.py` in `helpdesk_app` are for URLs that are specific to the context of our application,
+for example creating a new resource, updating a resource, creating a new category, and so forth.
+On the other hand, the `urls.py` in `helpdesk_proj` are more project-focused and higher-level, e.g.
+Rosetta or the Django administration backend.
+
+The URLs defined in this file are automatically included (inherited) from the parent `urls.py` file
+in `helpdesk_proj`. Given a technical limitation, it is important to note that URLs subject to internationalization
+(for now, only the `search/` pages) are included as part of the parent file instead of this file.
+'''
 from django.urls import path
 from helpdesk_app import views
 from django.shortcuts import redirect
