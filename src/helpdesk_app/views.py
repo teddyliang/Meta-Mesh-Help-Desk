@@ -26,6 +26,7 @@ logger.info("core.views logger")
 # Search model
 searcher = WebpageSearcher()
 AUTOCOMPLETE_MAX_RESULTS = 5
+FAQ_MAX_RESULTS = 5
 AUTOCOMPLETE_RESOURCE_TITLE_MAX_LENGTH = 40
 ##############################
 
