@@ -29,13 +29,13 @@ AUTOCOMPLETE_MAX_RESULTS = 5
 ##############################
 
 
-def thumbs_up_clicked(request):
+def thumbs_down_clicked(request):
     query = request.GET.get('title', '')
     resource = AnswerResource.objects.all().filter(title=query).first()
     if resource is None:
         return redirect('/search')
-    resource.thumbsUps = resource.thumbsUps + 1
-    print(resource.thumbsUps)
+    resource.thumbsDowns = resource.thumbsDowns + 1
+    print(resource.thumbsDowns)
     resource.save()
     return redirect('/search')
 
