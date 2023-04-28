@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # This SECRET_KEY must be changed!
 SECRET_KEY = 'f867a25e39a5214669e06ba9e0d3bc94e6920c02d0159d67e05491ef6ecfd96d'
 DEBUG = True  # This should always be False in production!
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '44.204.81.89']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '44.204.81.89', 'help.bringtheweb.org']
 
 SECURE_SSL_REDIRECT = False
 
