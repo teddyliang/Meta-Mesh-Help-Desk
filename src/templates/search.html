@@ -23,13 +23,13 @@
         <script src="{% static 'helpdesk_app/js/linkify.js' %}"></script>
         <!-- scripts to handle resource statistics -->
         <script>
-            function thumbsUpClicked(element, title) {
+            function thumbsDownClicked(element, title) {
                 console.log(title)
                 $.ajax({
-                    url: "thumbsUpClicked",
+                    url: "thumbsDownClicked",
                     data: {'title': title}
                 })
-                element.style.color = "green"
+                element.style.color = "red"
                 setTimeout(function() {
                     element.style.display = 'none';
                 }, 300);
@@ -47,7 +47,7 @@
                 })
             }
         </script>
-        <!-- autocomplete / FAQ script -->
+        <!-- autocomplete script -->
         <script>
             $( function() {
                 $( "#tags" ).autocomplete({
@@ -122,10 +122,10 @@
                         <a  onclick="resourceClicked.bind(this, this, '{{ result.title }}')()" href="{{ result.url }}">{{ result.url }}</a>
                         <p>{{ result.updated|date:"F jS Y" }} - {{ result.blurb }}</p>
 
-                        <!-- Thumbs up button -->
-                        <p href="{% url 'logout' %}" onclick="thumbsUpClicked.bind(this, this, '{{ result.title }}')()" style="cursor: pointer;">
-                            Was this helpful? 
-                            <i class="fa fa-thumbs-up"></i> 
+                        <!-- Thumbs down button -->
+                        <p href="{% url 'logout' %}" onclick="thumbsDownClicked.bind(this, this, '{{ result.title }}')()" style="cursor: pointer;">
+                            Was this irrelevant? 
+                            <i class="fa fa-thumbs-down"></i> 
                         </p>
                         <script>resourceAppeared(this, '{{ result.title }}');</script>
                     </div>

@@ -44,7 +44,7 @@ class AnswerResource(models.Model):
     # Statistic fields
     appearances = models.IntegerField(blank=True, default=0)
     clicks = models.IntegerField(blank=True, default=0)
-    thumbsUps = models.IntegerField(blank=True, default=0)
+    thumbsDowns = models.IntegerField(blank=True, default=0)
 
 
 @receiver(post_save, sender=User)
