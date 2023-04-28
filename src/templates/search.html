@@ -62,11 +62,14 @@
                         });
                 };
                 // using the autocomplete widget, getOptions is called when the user types into the search bar
-
-            } );
                 $( "#tags" ).autocomplete({
-                    source: '{% url "autocomplete" %}',
-                    minlength: 1
+                    source: getOptions,
+                    minlength: 1,
+
+                    //set width of autcomplete result box to the width of the search bar
+                    open: function() {
+                        $("ul.ui-menu").width( $(this).innerWidth() );
+                    }
                 });
 
                 $( "#main-category-select" ).on('change', function() {
@@ -96,6 +99,8 @@
                         }
                     });
                 });
+            } );
+
         </script>
     </head>
     {% get_current_language as CURRENT_LANGUAGE %}
