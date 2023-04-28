@@ -78,7 +78,6 @@ def get_faq(request):
     return JsonResponse({"faq": faq_for_category(category)})
 
 
-
 def autocomplete_search(request):
     titles = list()
     if 'term' in request.GET:
