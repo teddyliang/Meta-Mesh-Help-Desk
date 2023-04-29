@@ -1,3 +1,8 @@
+'''
+This file handles most of the business logic when receiving a HTTP
+request and returning one back. Each pattern in `urls.py` corresponds
+to a function defined here.
+'''
 # Time
 import datetime
 from django.utils import timezone

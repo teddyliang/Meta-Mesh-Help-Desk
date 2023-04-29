@@ -1,14 +1,14 @@
-# The WebSearcher class is a model that allows users to create a searchable
-# database of specific websites. It uses a combination of webscraping and manually
-# typed key words to search through the links. Basically like google but only with
-# the links you allow.
-#
-# To use,
-#
-#   1. Start with instantiating a WebSearcher object, eg: searcher = WebpageSearcher()
-#   2. Add any amount of links you want to search, eg: searcher.add_link('http://www.google', keyword='google')
-#   3. Once you have added all the links, you can run the search() method, eg: searcher.search('google')
+'''
+The WebSearcher class is a model that allows users to create a searchable
+database of specific websites. It uses a combination of webscraping and manually
+typed key words to search through the links. Operates similar to Google but with a user-defined
+corpus.
 
+To use,
+    1. Start with instantiating a WebSearcher object, eg: searcher = WebpageSearcher()
+    2. Add any amount of links you want to search, eg: searcher.add_link('http://www.google', keyword='google')
+    3. Once you have added all the links, you can run the search() method, eg: searcher.search('google')
+'''
 
 import nltk
 from nltk.corpus import stopwords
@@ -48,14 +48,13 @@ class WebpageSearcher:
                     '''could not webscrape the link'''
                     pass
         except OperationalError:
-            ''' When first initializing views.py, it's possible that the database doesn't exist yet.
-            In these cases, Django will throw an OperationalError when trying to init the WebpageSearcher as
-            the call to AnswerResource will be invalid. In these cases, it's fine to pass.
-            '''
+            # When first initializing views.py, it's possible that the database doesn't exist yet.
+            # In these cases, Django will throw an OperationalError when trying to init the WebpageSearcher as
+            # the call to AnswerResource will be invalid. In these cases, it's fine to pass.
             pass
 
     def update_search_engine(self):
-        # webscrape the link
+        # Webscrape the link
         self.links = AnswerResource.objects.all()
 
         for link in self.links:
@@ -75,7 +74,7 @@ class WebpageSearcher:
 
         # Use the tags similarity method to find the best match
         if USE_TAGS:
-            # seems like I have to create an object to be able to compare it to other objects with similar tags
+            # Techncial limitation: we need to create an object to be able to compare it to other objects with similar tags
             comparable = AnswerResource()
             comparable.tags = processed_query
             comparable.url = "https://amazon.com/"

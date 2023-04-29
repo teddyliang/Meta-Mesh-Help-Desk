@@ -1,10 +1,14 @@
+'''
+This file defines, for each model, all ways to filter
+and order its results.
+'''
 import django_filters
 from django_filters import DateFilter, OrderingFilter, CharFilter
 from .models import Category, User, AnswerResource
 
 
 class UserFilter(django_filters.FilterSet):
-    # Ordering
+    # Ordering filters
     o = OrderingFilter(
         fields=(
             ('last_login', 'last_login'),
@@ -23,6 +27,9 @@ class UserFilter(django_filters.FilterSet):
         fields = ['username', 'is_superuser']
 
     def __init__(self, *args, **kwargs):
+        '''
+        This is necessary in order to be able to change the displayed label for filters.
+        '''
         super(UserFilter, self).__init__(*args, **kwargs)
         self.filters['is_superuser'].label = "Superadmin status:"
 
@@ -31,6 +38,11 @@ class ResourceFilter(django_filters.FilterSet):
     updated = DateFilter(field_name="updated", lookup_expr='gte')
 
     def keyword_search(queryset, name, value):
+        '''
+        Unfortunately, the default Django text filter is case sensitive and must completely match the string.
+        Meaning, no results would be returned when searching for "dja" and expecting "django". Instead, we create
+        a custom text-based filter that does this search which is case-insensitive and permits substrings.
+        '''
         if value is not None:
             records = AnswerResource.objects.all()
             ids = [record.id for record in records
@@ -38,10 +50,10 @@ class ResourceFilter(django_filters.FilterSet):
                    ]
             return queryset.filter(id__in=ids)
         return queryset
-    # Excluded (non-default filters)
+    # Now define the custom text filter (the method it'll use is the above-defined method)
     keyword_search = CharFilter(method=keyword_search, label='Keyword search')
 
-    # Ordering
+    # Ordering filters
     o = OrderingFilter(
         fields=(
             ('title', 'title'),
@@ -61,6 +73,9 @@ class ResourceFilter(django_filters.FilterSet):
         fields = ['updated', 'categories']
 
     def __init__(self, *args, **kwargs):
+        '''
+        This is necessary in order to be able to change the displayed label for filters.
+        '''
         super(ResourceFilter, self).__init__(*args, **kwargs)
         self.filters['updated'].label = "Last updated date is on or after:"
 

@@ -1,3 +1,6 @@
+'''
+Application-wide settings.
+'''
 import os
 from django.contrib.messages import constants as messages
 from django.utils.translation import gettext_lazy as _
@@ -136,9 +139,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# Error
-# CSRF_FAILURE_VIEW = 'helpdesk_app.views.err403'
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 WHITENOISE_MANIFEST_STRICT = False
 
@@ -175,13 +175,3 @@ LOGGING = {
         }
     }
 }
-
-# # DJANGO-HEROKU:
-# import django_heroku
-# django_heroku.settings(locals(), logging=False)
-
-
-# Heroku: Update database configuration from $DATABASE_URL.
-# import dj_database_url
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
