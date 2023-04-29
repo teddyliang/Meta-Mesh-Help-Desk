@@ -42,7 +42,9 @@
           {% if user.is_authenticated %}
             <li {% if request.resolver_match.url_name == 'resources' or request.resolver_match.url_name == 'new_resource' or request.resolver_match.url_name == 'update_resource' %}class="active"{% endif %}><a href="{% url 'resources' %}">Resources</a></li>
             <li {% if request.resolver_match.url_name == 'categories' or request.resolver_match.url_name == 'new_category' or request.resolver_match.url_name == 'update_category' %}class="active"{% endif %}><a href="{% url 'categories' %}">Categories</a></li>
-            <li {% if request.resolver_match.url_name == 'accounts' %}class="active"{% endif %}><a href="{% url 'accounts' %}">All Staff</a></li>
+            {% if user.is_superuser %}
+              <li {% if request.resolver_match.url_name == 'accounts' %}class="active"{% endif %}><a href="{% url 'accounts' %}">All Staff</a></li>
+            {% endif %}
             <li {% if request.resolver_match.url_name == 'account' or request.resolver_match.url_name == 'update_account' %}class="active"{% endif %}><a href="{% url 'account_redirect' %}">Account</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
           {% else %}
@@ -68,7 +70,9 @@
           {% if user.is_authenticated %}
             <li {% if request.resolver_match.url_name == 'resources' or request.resolver_match.url_name == 'new_resource' or request.resolver_match.url_name == 'update_resource' %}class="active"{% endif %}><a href="{% url 'resources' %}">Resources</a></li>
             <li {% if request.resolver_match.url_name == 'categories' or request.resolver_match.url_name == 'new_category' or request.resolver_match.url_name == 'update_category' %}class="active"{% endif %}><a href="{% url 'categories' %}">Categories</a></li>
-            <li {% if request.resolver_match.url_name == 'accounts' %}class="active"{% endif %}><a href="{% url 'accounts' %}">All Staff</a></li>
+            {% if user.is_superuser %}
+              <li {% if request.resolver_match.url_name == 'accounts' %}class="active"{% endif %}><a href="{% url 'accounts' %}">All Staff</a></li>
+            {% endif %}
             <li {% if request.resolver_match.url_name == 'account' or request.resolver_match.url_name == 'update_account' %}class="active"{% endif %}><a href="{% url 'account_redirect' %}">Account</a></li>
             <li><a href="/rosetta">Rosetta</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
