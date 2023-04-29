@@ -1,4 +1,4 @@
-from helpdesk_app.views import thumbs_up_clicked, new_resource, resource_appeared, resource_clicked
+from helpdesk_app.views import thumbs_down_clicked, new_resource, resource_appeared, resource_clicked
 from helpdesk_app.models import AnswerResource, Category
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
@@ -59,23 +59,23 @@ class ResourceStatsTests(TestCase):
         self.assertEquals(AnswerResource.objects.all().count(), 2)
         self.assertEquals(len(list(AnswerResource.objects.first().tags.names())), 3)
 
-    def test_thumbs_up_clicked(self):
+    def test_thumbs_down_clicked(self):
         # Prepare request object
-        request = self.factory.get('/thumbsUpClicked?title=Carnegie%20Mellon')
+        request = self.factory.get('/thumbsDownClicked?title=Carnegie%20Mellon')
         request.user = self.user
         # Necessary as messages and session middleware are not instantiated in test environments
         setattr(request, 'session', 'session')
         setattr(request, '_messages', FallbackStorage(request))
 
         # Same as making a GET request to '/thumsUpClicked')
-        response = thumbs_up_clicked(request)
+        response = thumbs_down_clicked(request)
        
         # checks to see if the data object has been updated properly    
-        self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().thumbsUps, 1)
+        self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().thumbsDowns, 1)
 
         # doing it again for redundency
-        response = thumbs_up_clicked(request)
-        self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().thumbsUps, 2)
+        response = thumbs_down_clicked(request)
+        self.assertEqual(AnswerResource.objects.all().filter(title="Carnegie Mellon").first().thumbsDowns, 2)
 
     def test_resource_appeared(self):
         # Prepare request object

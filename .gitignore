@@ -128,6 +128,7 @@ dmypy.json
 
 # Virtual environments
 venv/
+Pipfile.lock
 
 # Workspace settings
 launch.json
