@@ -21,15 +21,15 @@
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'helpdesk_app/css/jquery-ui.css' %}">
         <script src="{% static 'helpdesk_app/js/linkify.js' %}"></script>
-        <!-- scripts to handle resource statistics -->
+        <!-- Scripts to handle resource statistics -->
         <script>
-            function thumbsUpClicked(element, title) {
+            function thumbsDownClicked(element, title) {
                 console.log(title)
                 $.ajax({
-                    url: "thumbsUpClicked",
+                    url: "thumbsDownClicked",
                     data: {'title': title}
                 })
-                element.style.color = "green"
+                element.style.color = "red"
                 setTimeout(function() {
                     element.style.display = 'none';
                 }, 300);
@@ -47,27 +47,27 @@
                 })
             }
         </script>
-        <!-- autocomplete / FAQ script -->
+        <!-- Autocomplete script -->
         <script>
             $( function() {
                 var getOptions = function (request, response) {
-                    // get the selected category
+                    // Get the selected category
                     var categories_elements = document.getElementsByClassName("search_category");
                     var selected_category = categories_elements[0].options[categories_elements[0].selectedIndex].value;
                     console.log(selected_category)
                     $.getJSON(
-                        // build autocomplete query
+                        // Build autocomplete query
                         '{% url "autocomplete" %}' + "?term=" +request.term + "&c=" + selected_category,
                         function (data) {
                             return response(data);
                         });
                 };
-                // using the autocomplete widget, getOptions is called when the user types into the search bar
+                // Using the autocomplete widget, getOptions is called when the user types into the search bar
                 $( "#tags" ).autocomplete({
                     source: getOptions,
                     minlength: 1,
 
-                    // set width of autcomplete result box to the width of the search bar
+                    // Set width of autocomplete result box to the width of the search bar
                     open: function() {
                         $("ul.ui-menu").width( $(this).innerWidth() );
                     }
@@ -141,10 +141,10 @@
                         <a  onclick="resourceClicked.bind(this, this, '{{ result.title }}')()" href="{{ result.url }}">{{ result.url }}</a>
                         <p>{{ result.updated|date:"F jS Y" }} - {{ result.blurb }}</p>
 
-                        <!-- Thumbs up button -->
-                        <p href="{% url 'logout' %}" onclick="thumbsUpClicked.bind(this, this, '{{ result.title }}')()" style="cursor: pointer;">
-                            Was this helpful? 
-                            <i class="fa fa-thumbs-up"></i> 
+                        <!-- Thumbs down button -->
+                        <p href="{% url 'logout' %}" onclick="thumbsDownClicked.bind(this, this, '{{ result.title }}')()" style="cursor: pointer;">
+                            {% trans "Irrelevant" %} 
+                            <i class="fa fa-thumbs-down"></i> 
                         </p>
                         <script>resourceAppeared(this, '{{ result.title }}');</script>
                     </div>
