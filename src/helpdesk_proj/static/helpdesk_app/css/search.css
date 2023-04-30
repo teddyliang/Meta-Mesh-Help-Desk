@@ -83,6 +83,13 @@ li a:hover {
     align-content: center;
 }
 
+.search_section {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+
 .bar {
     display: flex;
     margin: 1%;
@@ -91,6 +98,10 @@ li a:hover {
     border-radius:30px;
     border:1px solid #3950A2;
     align-items: center;
+}
+
+.buttons {
+    margin: 1%;
 }
 
 .bar:hover{
