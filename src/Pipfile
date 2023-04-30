@@ -53,7 +53,6 @@ wrapt = "==1.11.1"
 django-widget-tweaks = "==1.4.12"
 python-gettext = "*"
 django-rosetta = "==0.9.8"
-re = "3.11.3"
 
 [dev-packages]
 flake8 = "*"
