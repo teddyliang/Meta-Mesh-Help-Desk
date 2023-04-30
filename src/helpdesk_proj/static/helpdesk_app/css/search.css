@@ -31,27 +31,65 @@ li a:hover {
     bottom:4px;
 }
 
-.signbutton{
+.standard-button {
+    background-color: #181818;
+    color: #fff;
+    border: 1px solid #5e5e5e;
+    border-radius: 3px;
+    padding: 7px 10px;
+    position: relative;
+    font-weight: bold;
+}
+
+.sign-button {
     background-color: #4885ed;
     color: #fff;
     border:none;
     border-radius:3px;
     padding:7px 10px;
     position:relative;
-    bottom:7px;
     font-weight:bold;
 }
 
-.logo{
-    margin-top:200px;
-    margin-bottom:20px;
+.logo {
+    width: 70%;
 }
 
-.bar{
-    margin:0 auto;
-    width:575px;
+.small-logo {
+    max-height: 90px;
+}
+
+.space-between {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inline {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.centered {
+    margin-top: 10%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+.bar {
+    display: flex;
+    margin: 1%;
+    width: 80%;
+    height: 45px;
     border-radius:30px;
     border:1px solid #3950A2;
+    align-items: center;
 }
 
 .bar:hover{
@@ -63,11 +101,24 @@ li a:hover {
     outline:none;
 }
 
+.search_category{
+    margin-left: 3%;
+    height: 100%;
+    width: 11em;
+    background: none;
+    color: #8b8b8b;
+    margin-right: 2%;
+    border-right: 1px solid #3950a2;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+}
+
 .searchbar{
-    height:45px;
-    border:none;
-    width:500px;
-    font-size:16px;
+    height: 80%;
+    border: none;
+    width: calc(97% - 12em);
+    font-size: 16px;
     outline: none;
     background-color: #181818;
     color: rgb(231, 231, 231);
@@ -80,10 +131,6 @@ li a:hover {
     left:10px;
 }
 
-.buttons{
-    margin-top:30px;
-}
-
 .button{
     background-color: #3950A2;
     border:none;
@@ -93,6 +140,10 @@ li a:hover {
     margin:5px;
     border-radius:4px;
     outline:none;
+}
+
+.languagebutton:hover {
+    background-color: #515151;
 }
 
 .signbutton:hover {
@@ -116,4 +167,103 @@ li a:hover {
 
 .search_result a {
     color: #3950A2;
+}
+
+/* Search result styles */
+
+.results-area {
+    position: relative;
+    width: 90%;
+    left: 5%;
+}
+
+.result {
+    padding: 8px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.result h2 {
+    font-size: 19px;
+    line-height: 18px;
+    font-weight: normal;
+    color: rgb(216, 216, 216);
+    margin-bottom: 0px;
+    margin-top: 25px;
+}
+
+.result a {
+    font-size: 14px;
+    line-height: 14px;
+    color: #3498db;
+    margin-bottom: 0px;
+}
+
+.result p {
+    width: 100%;
+    font-size: 13px;
+    margin-top: 0px;
+    color: #bdc3c7;
+}
+
+.result-highlighted {
+    background-color: #1f1e1e;
+}
+
+.faq-box {
+    margin-top: 2%;
+    width: fit-content;
+    padding: 20px;
+    color: rgb(216, 216, 216);
+    border-radius:30px;
+    border:1px solid #3950A2;
+}
+
+.faq-box h3 {
+    margin-top: 0;
+}
+
+#faq-queries {
+    text-align: left;
+    line-height: 150%;
+}
+
+#faq-queries a {
+    color: #3498db;
+}
+
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #202020;
+    text-align: center;
+}
+
+footer p {
+    color: white;
+    margin-top: 20px;
+}
+
+.footer-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.footer-buttons a {
+    padding: 4px;
+}
+
+@media (max-width: 750px) {
+    .small-logo {
+        display: none;
+    }
+
+    .faq-box {
+        margin-top: 20%;
+        width: 67%;
+    }
 }

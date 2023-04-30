@@ -1,19 +1,25 @@
 from helpdesk_app.forms import ResourceForm
-from helpdesk_app.models import AnswerResource
+from helpdesk_app.models import AnswerResource, Category
 from django.test import TestCase
 
 class KeywordTests(TestCase):
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(self):
+        self.sample_category = Category.objects.create(
+            category_name="Test"
+        )
+
         # Create a test resource object for all test methods
         form_data = {
             'title' : "Check if scam website",
             'url' : "https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-or-trying-to-scam-you/", 
             'blurb' : "This resource gives 11 ways to determine if a website is legit or a scam", 
-            'tags': "hbc, hbc bank, 11 ways, scam, legit"
+            'tags': "hbc, hbc bank, 11 ways, scam, legit",
+            'categories' : [str(self.sample_category.id)]
         }
         form = ResourceForm(data=form_data)
         form.save()
+        print(form.errors)
 
     def test_object_valid(self):
         # Ensure the test object was successfully created

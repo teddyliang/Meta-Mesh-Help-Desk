@@ -19,3 +19,14 @@ def get_company_name(value):
         return "Community Internet Solutions"
     else:
         return "CIS"
+
+
+def categories_display(resource):
+    categories = list(resource.categories.all())
+    if len(categories) > 0:
+        return ', '.join(map(str, categories))
+    else:
+        return 'None'
+
+
+register.filter('categories_display', categories_display)

@@ -4,9 +4,13 @@ from django.utils import timezone
 # Django
 from SearchEngine.WebpageSearcher import WebpageSearcher
 from django.shortcuts import render, redirect
-from .forms import ProfileForm, SignUpForm, ResourceForm
-from .models import AnswerResource
+from .forms import ProfileForm, SignUpForm, ResourceForm, CategoryForm
+from .models import AnswerResource, Category
+from .forms import ProfileForm, SignUpForm, ResourceForm, CategoryForm
+from .models import AnswerResource, Category
 from django.conf import settings
+from django.http import JsonResponse
+from django.http import JsonResponse
 # Flash messages
 from django.contrib import messages
 # Signup/Login stuff
@@ -15,7 +19,8 @@ from django.contrib.auth.models import User
 # Paginator
 from django.core.paginator import Paginator
 # Filters
-from .filters import UserFilter, ResourceFilter
+from .filters import UserFilter, ResourceFilter, CategoryFilter
+from .filters import UserFilter, ResourceFilter, CategoryFilter
 # Logging
 import logging
 logger = logging.getLogger('ex_logger')
@@ -24,24 +29,126 @@ logger.info("core.views logger")
 ##############################
 # Search model
 searcher = WebpageSearcher()
-searcher.add_link("https://techboomers.com/", "computers, software")
-searcher.add_link("https://seniornet.org/", "computers, software, easy, senior")
-searcher.add_link("https://www.hbc.bank/11-ways-to-check-if-a-website-is-legit-or-trying-to-scam-you/", "bank, money")
+AUTOCOMPLETE_MAX_RESULTS = 5
+FAQ_MAX_RESULTS = 5
+AUTOCOMPLETE_MAX_RESULTS = 5
+FAQ_MAX_RESULTS = 5
 ##############################
+
+
+def thumbs_down_clicked(request):
+    query = request.GET.get('title', '')
+    resource = AnswerResource.objects.all().filter(title=query).first()
+    if resource is None:
+        return redirect('/search')
+    resource.thumbsDowns = resource.thumbsDowns + 1
+    print(resource.thumbsDowns)
+    resource.save()
+    return redirect('/search')
+
+
+def resource_clicked(request):
+    query = request.GET.get('title', '')
+    resource = AnswerResource.objects.all().filter(title=query).first()
+    if resource is None:
+        return redirect('/search')
+    resource.clicks = resource.clicks + 1
+    resource.save()
+    return redirect('/search')
+
+
+def resource_appeared(request):
+    query = request.GET.get('title', '')
+    resource = AnswerResource.objects.all().filter(title=query).first()
+    if resource is None:
+        return redirect('/search')
+    resource.appearances = resource.appearances + 1
+    resource.save()
+    return redirect('/search')
+
+
+def faq_for_category(category):
+    if category is None:
+        return list(AnswerResource.objects.order_by('-appearances').values()[:FAQ_MAX_RESULTS])
+
+    return list(AnswerResource.objects.filter(categories__in=[category]).order_by('-appearances').values()[:FAQ_MAX_RESULTS])
+
+
+def get_faq(request):
+    category_name = request.GET.get('category', None)
+
+    category = None
+    if category_name is not None:
+        category = Category.objects.filter(category_name=category_name).first()
+
+    return JsonResponse({"faq": faq_for_category(category)})
+
+
+def autocomplete_search(request):
+    titles = list()
+    if 'term' in request.GET:
+        query = request.GET.get('term')
+        category = request.GET.get('c', '')
+        autocomplete_results = None
+        category_object = None
+        if category != '':
+            # Safely handles invalid input -- even if the user manually changes the "?c=" field
+            # to a category that doesn't exist, it will not filter on any category and return all matches
+            category_object = Category.objects.all().filter(category_name=category).first()
+        # Using the searcher
+        if query != '':
+            autocomplete_results = searcher.search(query, category_object)
+            if not len(autocomplete_results):
+                # Using just the title if no results came from the seracher
+                autocomplete_results = AnswerResource.objects.filter(title__icontains=query)
+
+        for resource in autocomplete_results:
+            titles.append(resource.title)
+    return JsonResponse(titles[:AUTOCOMPLETE_MAX_RESULTS], safe=False)
 
 
 def search(request):
     # TODO: This should be made async
     query = request.GET.get('q', '')
-    result = ""
-    if query != '':
-        url = searcher.search(query)[0]  # Only displaying the first result for now
-        if url is None or url == "no result":
-            result = "No matches found"
-        else:
-            result = "Closest match: " + url
+    category = request.GET.get('c', '')
+    results = None
+    category_object = None
+    faq = None
+
+    if category != '':
+        # Safely handles invalid input -- even if the user manually changes the "?c=" field
+        # to a category that doesn't exist, it will not filter on any category and return all matches
+        category_object = Category.objects.all().filter(category_name=category).first()
+
+    if query == '':
+        faq = faq_for_category(category_object)
+    else:
+        results = searcher.search(query, category_object)
+
+    categories = Category.objects.all()
+
+    category = request.GET.get('c', '')
+    results = None
+    category_object = None
+    faq = None
+
+    if category != '':
+        # Safely handles invalid input -- even if the user manually changes the "?c=" field
+        # to a category that doesn't exist, it will not filter on any category and return all matches
+        category_object = Category.objects.all().filter(category_name=category).first()
+
+    if query == '':
+        faq = faq_for_category(category_object)
+    else:
+        results = searcher.search(query, category_object)
+
+    categories = Category.objects.all()
+
     return render(request, 'search.html', {
-        "result": result,
+        "query": query,
+        "results": results,
+        "categories": categories,
+        "faq": faq
     })
 
 
@@ -59,7 +166,7 @@ def accounts(request):
         return render(request, "accounts.html", {"page_obj": page_obj, 'myFilter': myFilter, 'user': request.user})
     else:
         messages.error(request, 'You do not have permission to access this resource.')
-        return redirect('/home')
+        return redirect('/search')
 
 
 @login_required
@@ -77,10 +184,10 @@ def account(request, id):
             return render(request, "account.html", {'user': request.user, 'view_user': current_user, 'profile_form': profile_form})
         except:
             messages.error(request, 'Invalid user ID.')
-            return redirect('/home')
+            return redirect('/accounts')
     else:
         messages.error(request, 'You do not have permission to do that.')
-        return redirect('/home')
+        return redirect('/search')
 
 
 @login_required
@@ -118,7 +225,7 @@ def update_profile(request, id):
             record = User.objects.get(id=id)
         except:
             messages.error(request, 'This user does not exist.')
-            return redirect('/home')
+            return redirect('/accounts')
 
         if request.method == "POST":
             profile_form = ProfileForm(request.POST, instance=record.profile)
@@ -140,7 +247,7 @@ def update_profile(request, id):
             })
     else:
         messages.error(request, 'You do not have permission to do that.')
-        return redirect('/home')
+        return redirect('/search')
 
 
 @login_required
@@ -163,7 +270,7 @@ def signup(request):
         })
     else:
         messages.error(request, 'You do not have permission to do that.')
-        return redirect('/home')
+        return redirect('/search')
 
 
 @login_required
@@ -174,6 +281,7 @@ def new_resource(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Resource created successfully')
+            searcher.update_search_engine()
             return redirect('/resources')
         else:
             return render(request, "resource_form.html", {
@@ -189,6 +297,7 @@ def new_resource(request):
 
 @login_required
 def update_resource(request, id):
+    print("HELLO THERE ARE   ")
     record = None
     try:
         record = AnswerResource.objects.get(id=id)
@@ -203,6 +312,7 @@ def update_resource(request, id):
             record.updated = datetime.datetime.now(tz=timezone.utc)
             record.save()
             messages.success(request, 'Resource updated successfully.')
+            searcher.update_search_engine()
             return redirect('/resources')
         else:
             return render(request, "resource_form.html", {
@@ -210,7 +320,6 @@ def update_resource(request, id):
             })
     else:
         resource_form = ResourceForm(instance=record)
-
         return render(request, 'resource_form.html', {
             'form': resource_form,
         })
@@ -228,6 +337,7 @@ def delete_resource(request, id):
     try:
         record.delete()
         messages.success(request, 'Resource deleted successfully.')
+        searcher.update_search_engine()
         return redirect('/resources')
     except Exception as e:
         messages.error(request, 'Deletion failed, see error: ' + str(e))
@@ -245,3 +355,82 @@ def view_resources(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "resources.html", {"page_obj": page_obj, "myFilter": myFilter, "user": request.user})
+
+
+@login_required
+def new_category(request):
+    if request.method == "POST":
+        # Create
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category created successfully')
+            return redirect('/categories')
+        else:
+            return render(request, "category_form.html", {
+                "form": form
+            })
+    else:
+        # Render new form
+        form = CategoryForm()
+        return render(request, "category_form.html", {
+            "form": form
+        })
+
+
+@login_required
+def update_category(request, id):
+    record = None
+    try:
+        record = Category.objects.get(id=id)
+    except:
+        messages.error(request, 'This category does not exist.')
+        return redirect('/categories')
+
+    if request.method == "POST":
+        category_form = CategoryForm(request.POST, instance=record)
+        if category_form.is_valid():
+            record = category_form.save()
+            record.save()
+            messages.success(request, 'Category updated successfully.')
+            return redirect('/categories')
+        else:
+            return render(request, "category_form.html", {
+                "form": category_form
+            })
+    else:
+        category_form = CategoryForm(instance=record)
+        return render(request, 'category_form.html', {
+            'form': category_form,
+        })
+
+
+@login_required
+def delete_category(request, id):
+    record = None
+    try:
+        record = Category.objects.get(id=id)
+    except:
+        messages.error(request, 'Invalid category.')
+        return redirect('/categories')
+
+    try:
+        record.delete()
+        messages.success(request, 'Category deleted successfully.')
+        return redirect('/categories')
+    except Exception as e:
+        messages.error(request, 'Deletion failed, see error: ' + str(e))
+    return redirect('/categories')
+
+
+@login_required
+def view_categories(request):
+    records = Category.objects.all()
+
+    myFilter = CategoryFilter(request.GET, queryset=records)
+    records = myFilter.qs
+
+    paginator = Paginator(records, settings.PAGINATOR_COUNT + 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "categories.html", {"page_obj": page_obj, "myFilter": myFilter, "user": request.user})

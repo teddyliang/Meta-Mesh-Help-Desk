@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.urls import path
 from helpdesk_app import views
+from django.shortcuts import redirect
 
 urlpatterns = [
-    path('', views.search, name='home'),
-    path('home', views.search, name='home'),
-    path('search', views.search, name='search'),
+    path('', lambda request: redirect('search/', permanent=False), name='home'),
+    path('autocomplete', views.autocomplete_search, name='autocomplete'),
     path('signup/', views.signup, name="signup"),
     path('accounts/', views.accounts, name="accounts"),
     path('account', views.account_redirect, name="account_redirect"),
@@ -32,4 +32,9 @@ urlpatterns = [
     path('update_resource/<int:id>', views.update_resource, name="update_resource"),
     path('delete_resource/<int:id>', views.delete_resource, name="delete_resource"),
     path('resources/', views.view_resources, name="resources"),
+    path('new_category/', views.new_category, name="new_category"),
+    path('update_category/<int:id>', views.update_category, name="update_category"),
+    path('delete_category/<int:id>', views.delete_category, name="delete_category"),
+    path('categories/', views.view_categories, name="categories"),
+    path('get_faq', views.get_faq, name="get_faq"),
 ]

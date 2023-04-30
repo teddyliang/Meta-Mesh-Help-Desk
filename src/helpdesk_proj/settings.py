@@ -1,5 +1,6 @@
 import os
 from django.contrib.messages import constants as messages
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -7,7 +8,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # This SECRET_KEY must be changed!
 SECRET_KEY = 'f867a25e39a5214669e06ba9e0d3bc94e6920c02d0159d67e05491ef6ecfd96d'
 DEBUG = True  # This should always be False in production!
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'helpdesk-vht.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '44.204.81.89']
+
+SECURE_SSL_REDIRECT = False
 
 PAGINATOR_COUNT = 8
 
@@ -22,12 +25,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
-    'taggit'
+    'taggit',
+    'rosetta'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -85,7 +90,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
+# Translation texts can be changed using Rosetta. In a production environment, a server reload
+# may be necessary.
 
 LANGUAGE_CODE = 'en-us'
 
@@ -97,6 +103,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+LANGUAGES = (
+    ('en', _('English')),
+    ('es', _('Spanish')),
+)
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale"),
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
