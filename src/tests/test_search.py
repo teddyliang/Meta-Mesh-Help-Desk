@@ -107,3 +107,18 @@ class SearchTests(TestCase):
         
         # Ensure a response was NOT returned
         self.assertNotEqual(decoded_response.find("No results found"), -1)
+
+    def test_search_special_characters_no_results(self):
+        # Prepare request object
+        request = self.factory.get('/search?q=\" ^ \' - +  ^^ \'\' -- ++')
+        request.user = self.user
+        # Necessary as messages and session middleware are not instantiated in test environments
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
+        
+        # Same as making a GET request to '/search')
+        response = search(request)
+        decoded_response = str(response.content.decode('utf-8').rstrip().split('\n'))
+        
+        # Ensure a response was NOT returned
+        self.assertNotEqual(decoded_response.find("No results found"), -1)

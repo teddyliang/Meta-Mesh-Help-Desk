@@ -19,6 +19,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from helpdesk_app.models import AnswerResource
 from django.db.utils import OperationalError
+import re
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -27,12 +28,15 @@ nltk.download('wordnet')
 # Error message from browser when webscraping fails
 ERROR_MESSAGE = "Acceptable ! appropriate representation requested resource could found server . error generated Mod_Security ."
 # Determines how much the key words matter when searching links
-KEYWORD_WIEGHT = 2
+KEYWORD_WEIGHT = 2
 # Determines how many results should be returned
 SEARCH_LIST_LEN = 5
 # There are two methods of finding search results, use the tags matching built-in functionality or cosine similarity developed
 # in this class, this variable determines which method to use. (In development for now)
 USE_TAGS = False
+# Used for regex cleaning of input, all non-alphanumeric characters are removed expected these, the underlying algorithm for getting
+# search results has trouble with some characters so most most non-alphanumberic characters are remoed
+CHARACTERS_TO_KEEP_LIST = " ?!@#$%&()."
 
 
 class WebpageSearcher:
@@ -68,7 +72,6 @@ class WebpageSearcher:
     def search(self, query, category_object):
         # Use natural language processing to process the query
         processed_query = preprocess_text(query)
-
         if (processed_query is None or processed_query == ''):
             return []
 
@@ -90,7 +93,7 @@ class WebpageSearcher:
             for link in self.links:
                 processed_link = link.content
                 keywords = " ".join(link.tags.names())
-                similarity = (calculate_similarity(processed_query, processed_link) + calculate_similarity(processed_query, keywords) * KEYWORD_WIEGHT)
+                similarity = (calculate_similarity(processed_query, processed_link) + calculate_similarity(processed_query, keywords) * KEYWORD_WEIGHT)
                 if (similarity > 0):
                     similarities[link] = similarity
 
@@ -109,11 +112,18 @@ class WebpageSearcher:
 
 
 def preprocess_text(text):
+    # clean input with regex
+    text = re.sub(r'[^\w' + CHARACTERS_TO_KEEP_LIST + ']', '', text)
+
     # Tokenize the text into words
     words = nltk.word_tokenize(text)
-
     # Remove stopwords
     stopwords_list = stopwords.words('english')
+
+    # add all singlular charcters to stopwords list
+    for i in range(33, 127):
+        stopwords_list.append(chr(i))
+
     filtered_words = [word for word in words if word.lower() not in stopwords_list]
 
     # Lemmatize the words
