@@ -53,7 +53,8 @@
                 var getOptions = function (request, response) {
                     // get the selected category
                     var categories_elements = document.getElementsByClassName("search_category");
-                    var selected_category = categories_elements[0].options[categories_elements[0].selectedIndex].text;
+                    var selected_category = categories_elements[0].options[categories_elements[0].selectedIndex].value;
+                    console.log(selected_category)
                     $.getJSON(
                         // build autocomplete query
                         '{% url "autocomplete" %}' + "?term=" +request.term + "&c=" + selected_category,

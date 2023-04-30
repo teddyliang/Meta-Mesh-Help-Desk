@@ -83,9 +83,7 @@ def autocomplete_search(request):
     if 'term' in request.GET:
         query = request.GET.get('term')
         category = request.GET.get('c', '')
-        # if no category was actually selected
-        if category == "Category search" or category == "Categoría":
-            category = ""
+
         autocomplete_results = None
         category_object = None
         if category != '':
