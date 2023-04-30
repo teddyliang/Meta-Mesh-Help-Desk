@@ -50,9 +50,27 @@
         <!-- autocomplete / FAQ script -->
         <script>
             $( function() {
+                var getOptions = function (request, response) {
+                    // get the selected category
+                    var categories_elements = document.getElementsByClassName("search_category");
+                    var selected_category = categories_elements[0].options[categories_elements[0].selectedIndex].value;
+                    console.log(selected_category)
+                    $.getJSON(
+                        // build autocomplete query
+                        '{% url "autocomplete" %}' + "?term=" +request.term + "&c=" + selected_category,
+                        function (data) {
+                            return response(data);
+                        });
+                };
+                // using the autocomplete widget, getOptions is called when the user types into the search bar
                 $( "#tags" ).autocomplete({
-                    source: '{% url "autocomplete" %}',
-                    minlength: 1
+                    source: getOptions,
+                    minlength: 1,
+
+                    //set width of autcomplete result box to the width of the search bar
+                    open: function() {
+                        $("ul.ui-menu").width( $(this).innerWidth() );
+                    }
                 });
 
                 $( "#main-category-select" ).on('change', function() {
@@ -82,7 +100,8 @@
                         }
                     });
                 });
-            });
+            } );
+
         </script>
     </head>
     {% get_current_language as CURRENT_LANGUAGE %}

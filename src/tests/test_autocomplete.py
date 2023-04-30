@@ -87,15 +87,29 @@ class AutocompleteTests(TestCase):
         # Same as making a GET request to '/autocomplete')
         response = autocomplete_search(request)
         decoded_response = str(response.content.decode('utf-8').rstrip().split('\n'))
-
         # Ensure a response was returned
         self.assertEquals(decoded_response.find("No results found"), -1)
         # Ensure the right resource was returned by the model
-        self.assertNotEqual(decoded_response.find("How to Properly Restart a Router and Modem"), -1)
+        self.assertNotEqual(decoded_response.find("How to Properly Restart a Router"), -1)
 
     def test_autocomplete_no_result(self):
         # Prepare request object
         request = self.factory.get('/autocomplete?term=random')
+        request.user = self.user
+        # Necessary as messages and session middleware are not instantiated in test environments
+        setattr(request, 'session', 'session')
+        setattr(request, '_messages', FallbackStorage(request))
+
+        # Same as making a GET request to '/autocomplete')
+        response = autocomplete_search(request)
+        decoded_response = ''.join(filter(str.isalnum, str(response.content.decode('utf-8').rstrip().split('\n'))))
+
+        # Ensure a response was NOT returned
+        self.assertEqual(decoded_response, "")
+
+    def test_autocomplete_different_category_no_result(self):
+        # Prepare request object
+        request = self.factory.get('/autocomplete?term=restart&c=Category1')
         request.user = self.user
         # Necessary as messages and session middleware are not instantiated in test environments
         setattr(request, 'session', 'session')
