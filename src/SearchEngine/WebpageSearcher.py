@@ -36,7 +36,7 @@ SEARCH_LIST_LEN = 5
 USE_TAGS = False
 # Used for regex cleaning of input, all non-alphanumeric characters are removed expected these, the underlying algorithm for getting
 # search results has trouble with some characters so most most non-alphanumberic characters are remoed
-CHARACTERS_TO_KEEP_LIST = " /\\?!@#$%&*();,.:"
+CHARACTERS_TO_KEEP_LIST = " ?!@#$%&()."
 
 
 class WebpageSearcher:
