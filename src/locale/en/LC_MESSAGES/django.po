@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-30 07:28+0000\n"
-"PO-Revision-Date: 2023-04-18 06:18+0000\n"
+"POT-Creation-Date: 2023-04-30 19:23-0400\n"
+"PO-Revision-Date: 2023-04-30 20:56+0000\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -34,6 +34,10 @@ msgstr ""
 #: templates/search.html:129 templates/search.html:180
 msgid "Search"
 msgstr ""
+
+#: templates/search.html:146
+msgid "Irrelevant"
+msgstr "Was this irrelevant?"
 
 #: templates/search.html:155
 msgid "No results found"
