@@ -67,7 +67,7 @@
                     source: getOptions,
                     minlength: 1,
 
-                    //set width of autcomplete result box to the width of the search bar
+                    // set width of autcomplete result box to the width of the search bar
                     open: function() {
                         $("ul.ui-menu").width( $(this).innerWidth() );
                     }
@@ -163,20 +163,22 @@
             <center>
             <img alt="Logo" class="logo" src="{% static 'helpdesk_app/img/logo.png' %}">
             <form action="{% url 'search' %}" method="get">
-                <div class="bar">
-                    <select class="search_category" name="c" id="main-category-select">
-                        <option value="">{% trans "Category search" %}</option>
-                        {% for category in categories %}
-                            <option value="{{ category.category_name }}">
-                            {{ category }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                    <input id="tags" class="searchbar" type="text" title="Search" name="q">
-                </div>
-                <br/>
-                <div class="buttons">
-                    <input class="button" type="submit" value="{% trans 'Search' %}"></input>
+                <div class="search_section">
+                    <div class="bar">
+                        <select class="search_category" name="c" id="main-category-select">
+                            <option value="">{% trans "Category search" %}</option>
+                            {% for category in categories %}
+                                <option value="{{ category.category_name }}">
+                                {{ category }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <input id="tags" class="searchbar" type="text" title="Search" name="q">
+                    </div>
+                    <br/>
+                    <div class="buttons">
+                        <input class="button" type="submit" value="{% trans 'Search' %}"></input>
+                    </div>
                 </div>
             </form>
             </center>

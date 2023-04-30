@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-30 06:30+0000\n"
+"POT-Creation-Date: 2023-04-30 07:28+0000\n"
 "PO-Revision-Date: 2023-04-18 06:18+0000\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,19 +19,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: helpdesk_proj/settings.py:107 templates/search.html:202
+#: helpdesk_proj/settings.py:110 templates/search.html:204
 msgid "English"
 msgstr ""
 
-#: helpdesk_proj/settings.py:108 templates/search.html:204
+#: helpdesk_proj/settings.py:111 templates/search.html:206
 msgid "Spanish"
 msgstr ""
 
-#: templates/search.html:118 templates/search.html:168
+#: templates/search.html:118 templates/search.html:169
 msgid "Category search"
 msgstr ""
 
-#: templates/search.html:129 templates/search.html:179
+#: templates/search.html:129 templates/search.html:180
 msgid "Search"
 msgstr ""
 
@@ -43,19 +43,19 @@ msgstr ""
 msgid "No results 2"
 msgstr "Try calling this number: XXX"
 
-#: templates/search.html:188
+#: templates/search.html:190
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: templates/search.html:207
+#: templates/search.html:209
 msgid "Logout"
 msgstr ""
 
-#: templates/search.html:208
+#: templates/search.html:210
 msgid "Admin Panel"
 msgstr ""
 
-#: templates/search.html:210
+#: templates/search.html:212
 msgid "Staff Login"
 msgstr ""
 
