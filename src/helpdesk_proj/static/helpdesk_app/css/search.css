@@ -246,8 +246,10 @@ li a:hover {
 
 
 footer {
+    position: fixed;
     left: 0;
     bottom: 0;
+    width: 100%;
     padding: 6px;
     background-color: #202020;
     text-align: center;
